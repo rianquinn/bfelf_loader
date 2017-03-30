@@ -58,9 +58,9 @@ before_script:
   - mkdir build
   - cd build
 
-#
-# bfsdk
-#
+  #
+  # bfsdk
+  #
   - git clone https://github.com/Bareflank/bfsdk.git
   - mkdir bfsdk/build
   - pushd bfsdk/build
@@ -68,9 +68,9 @@ before_script:
   - make install
   - popd
 
-#
-# bfsysroot
-#
+  #
+  # bfsysroot
+  #
   - git clone https://github.com/Bareflank/bfsysroot.git
   - mkdir bfsysroot/build
   - pushd bfsysroot/build
