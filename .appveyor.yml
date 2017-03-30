@@ -1,3 +1,6 @@
+os: Visual Studio 2017
+platform: x64
+
 #
 # Custom environment variables
 #
@@ -18,14 +21,29 @@ install:
   - 'setup-x86_64.exe --quiet-mode --no-shortcuts --only-site --root "%CYG_ROOT%" --site "%CYG_MIRROR%" --local-package-dir "%CYG_ROOT%\var\cache\setup" --packages "%CYG_PACKAGES%"'
   - 'copy setup-x86_64.exe %CYG_ROOT%\bin\'
 
+  #
+  # bfsdk (Cygwin)
+  #
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://github.com/Bareflank/bfsdk.git"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir bfsdk/build"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; cmake .."'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; make install"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; ../scripts/export_path.sh"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; cat ~/.bashrc"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; echo $PATH"'
 
+  #
+  # bfsdk (MSBuild)
+  #
+  - git clone https://github.com/Bareflank/bfsdk.git"
+  - mkdir bfsdk\build_msbuild
+  - cd bfsdk\build_msbuild
+  - cmake -G "Visual Studio 15 2017 Win64" ..
+  - msbuild bfsdk.sln
+  - cmake --build . --target install
+  - cd ..
+
+  #
+  # bfsysroot
+  #
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://github.com/Bareflank/bfsysroot.git"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir bfsysroot/build"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build; cmake -DCMAKE_TOOLCHAIN_FILE=~/bfprefix/cmake/CMakeToolchain_VMM.txt -DDISABLE_WARNINGS=on .."'
@@ -35,8 +53,22 @@ install:
 # Build
 #
 build_script:
+
+  #
+  # Cygwin
+  #
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir build"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; cmake .."'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; make"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; make test"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; make install"'
+
+  #
+  # Visual Studio (MSBuild)
+  #
+  - mkdir build_msbuild
+  - cd build_msbuild
+  - cmake -G "Visual Studio 15 2017 Win64" ..
+  - msbuild bfsdk.sln
+  - cmake --build . --target install
+  - cd ..

@@ -25,8 +25,8 @@
 #include <vector>
 #include <fstream>
 
-#include <stdint.h>
-#include <string.h>
+#include <cstdint>
+#include <cstring>
 
 #include <sys/mman.h>
 

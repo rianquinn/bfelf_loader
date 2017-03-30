@@ -31,34 +31,9 @@
 #include <bfconstants.h>
 #include <bferrorcodes.h>
 #include <bfsupport.h>
+#include <bfdebug.h>
 
 #pragma pack(push, 1)
-
-/* @cond */
-
-#ifdef __cplusplus
-#define scast(a, b) (static_cast<a>(b))
-#else
-#define scast(a, b) ((a)(b))
-#endif
-
-#ifdef __cplusplus
-#define rcast(a, b) (reinterpret_cast<a>(b))
-#else
-#define rcast(a, b) ((a)(b))
-#endif
-
-#ifdef __cplusplus
-#define add(a, b, c) (reinterpret_cast<a>(reinterpret_cast<const char *>(b) + (c)))
-#else
-#define add(a, b, c) ((a)((const char *)(b) + (c)))
-#endif
-
-#ifndef __cplusplus
-#define nullptr 0
-#endif
-
-/* @endcond */
 
 #ifdef __cplusplus
 extern "C" {
@@ -109,32 +84,6 @@ using bfelf64_word = uint32_t;
 using bfelf64_sword = int32_t;
 using bfelf64_xword = uint64_t;
 using bfelf64_sxword = int64_t;
-#endif
-
-/* @endcond */
-
-/* ---------------------------------------------------------------------------------------------- */
-/* Debug                                                                                          */
-/* ---------------------------------------------------------------------------------------------- */
-
-/* @cond */
-
-#ifdef KERNEL
-#if defined(__linux__)
-#include <linux/module.h>
-#define ALERT(...) printk("[ELF ALERT]: " __VA_ARGS__)
-#elif defined(__darwin__)
-#define ALERT(...) IOLog("[ELF ALERT]: " __VA_ARGS__)
-#elif defined(_WIN32)
-#include <ntddk.h>
-#pragma warning(disable : 4242)
-#pragma warning(disable : 4244)
-#define ALERT(...) DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[ELF ALERT]: " __VA_ARGS__)
-#endif
-#else
-#include <stdio.h>
-#include <stdlib.h>
-#define ALERT(...) printf("[ELF ALERT]: " __VA_ARGS__)
 #endif
 
 /* @endcond */
