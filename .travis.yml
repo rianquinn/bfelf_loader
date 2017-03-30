@@ -75,7 +75,7 @@ before_script:
   - mkdir bfsysroot/build
   - pushd bfsysroot/build
   - cmake -DCMAKE_TOOLCHAIN_FILE=~/bfprefix/cmake/CMakeToolchain_VMM_40.txt -DDISABLE_WARNINGS=on ..
-  - make install
+  - make
   - popd
 
 #

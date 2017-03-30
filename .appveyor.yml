@@ -47,7 +47,7 @@ install:
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://github.com/Bareflank/bfsysroot.git"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir bfsysroot/build"'
   - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build; cmake -DCMAKE_TOOLCHAIN_FILE=~/bfprefix/cmake/CMakeToolchain_VMM.txt -DDISABLE_WARNINGS=on .."'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build; make install"'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build; make"'
 
 #
 # Build
