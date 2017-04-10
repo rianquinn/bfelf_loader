@@ -41,6 +41,15 @@ TEST_CASE("bfelf_file_get_section_info: invalid info")
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
+TEST_CASE("bfelf_file_get_section_info: not added to loader")
+{
+    bfelf_file_t ef = {};
+    section_info_t info = {};
+
+    auto ret = bfelf_file_get_section_info(&ef, &info);
+    CHECK(ret == BFELF_ERROR_INVALID_ARG);
+}
+
 TEST_CASE("bfelf_file_get_section_info: expected misc resources")
 {
     auto ret = 0LL;

@@ -24,6 +24,7 @@
 
 #include <bfelf_loader.h>
 #include <test_fake_elf.h>
+#include <test_real_elf.h>
 
 TEST_CASE("bfelf_file_get_entry: invalid elf file")
 {
@@ -49,7 +50,7 @@ TEST_CASE("bfelf_file_get_entry: invalid addr")
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
-TEST_CASE("bfelf_file_get_entry: success")
+TEST_CASE("bfelf_file_get_entry: not added to loader")
 {
     auto ret = 0LL;
     void *addr = nullptr;
@@ -63,5 +64,18 @@ TEST_CASE("bfelf_file_get_entry: success")
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_entry(&ef, &addr);
+    CHECK(ret == BFELF_ERROR_INVALID_ARG);
+}
+
+TEST_CASE("bfelf_file_get_entry: success")
+{
+    auto ret = 0LL;
+    void *addr = nullptr;
+    bfelf_loader_t loader = {};
+
+    auto &&details = load_libraries(&loader, g_filenames);
+    auto &&lib1_details = details.at(0);
+
+    ret = bfelf_file_get_entry(&lib1_details.first, &addr);
     CHECK(ret == BFELF_SUCCESS);
 }

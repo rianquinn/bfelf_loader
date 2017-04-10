@@ -23,6 +23,7 @@
 #include <catch/catch.hpp>
 
 #include <bfelf_loader.h>
+#include <test_real_elf.h>
 
 TEST_CASE("bfelf_file_get_relro: invalid elf file")
 {
@@ -53,7 +54,7 @@ TEST_CASE("bfelf_file_get_relro: invalid size")
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
-TEST_CASE("bfelf_file_get_relro: success")
+TEST_CASE("bfelf_file_get_relro: not added to loader")
 {
     auto ret = 0LL;
     bfelf_file_t ef = {};
@@ -61,5 +62,19 @@ TEST_CASE("bfelf_file_get_relro: success")
     bfelf64_xword size = 0;
 
     ret = bfelf_file_get_relro(&ef, &addr, &size);
+    CHECK(ret == BFELF_ERROR_INVALID_ARG);
+}
+
+TEST_CASE("bfelf_file_get_relro: success")
+{
+    auto ret = 0LL;
+    bfelf64_addr addr = 0;
+    bfelf64_xword size = 0;
+    bfelf_loader_t loader = {};
+
+    auto &&details = load_libraries(&loader, g_filenames);
+    auto &&lib1_details = details.at(0);
+
+    ret = bfelf_file_get_relro(&lib1_details.first, &addr, &size);
     CHECK(ret == BFELF_SUCCESS);
 }

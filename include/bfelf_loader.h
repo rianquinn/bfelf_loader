@@ -236,6 +236,7 @@ struct bfelf_file_t {
     bfelf64_addr dynoff;
 
     const char *strtab;
+    const char *strtab_offset;
     const char *shstrtab;
 
     bfelf64_word nbucket;
@@ -1256,7 +1257,7 @@ private_process_dynamic_section(struct bfelf_file_t *ef)
                 break;
 
             case bfdt_strtab:
-                ef->strtab = rcast(char *, dyn->d_val);
+                ef->strtab_offset = rcast(char *, dyn->d_val);
                 break;
 
             case bfdt_symtab:
@@ -1414,6 +1415,19 @@ bfelf_file_init(const char *file, uint64_t filesz, struct bfelf_file_t *ef)
         }
     }
 
+    /*
+     * The string table is located in both ELF file provided here, as well as
+     * in the exec provided to bfelf_loader_add. By the time bfelf_loader_add
+     * is called, we assume that the file provided to this function has been
+     * deleted, but up to this point, the user is free to use some of the
+     * functions (like bfelf_file_get_needed), and for these we need a valid
+     * string table, so we store the location of the string table relative
+     * to the provided file, and then overwrite this when the user adds the
+     * ELF file to the loader, in which case we reference the string table
+     * relative to the provided exec.
+     */
+    ef->strtab = add(const char *, ef->strtab_offset, rcast(bfelf64_addr, file));
+
     return BFELF_SUCCESS;
 
 failure:
@@ -1513,6 +1527,10 @@ bfelf_file_get_section_info(struct bfelf_file_t *ef, struct section_info_t *info
         return bfinvalid_argument("info == NULL");
     }
 
+    if (ef->added == 0) {
+        return bfinvalid_argument("ef must be added to a loader first");
+    }
+
     for (i = 0; i < sizeof(struct section_info_t); i++) {
         rcast(char *, info)[i] = 0;
     }
@@ -1552,7 +1570,7 @@ bfelf_file_get_section_info(struct bfelf_file_t *ef, struct section_info_t *info
  * @expects addr != nullptr
  * @ensures returns BFELF_SUCCESS if params == valid
  *
- * @param ef the ELF file to get the info structure for
+ * @param ef the ELF file to get the entry location from
  * @param addr the resulting address of the entry point
  * @return BFELF_SUCCESS on success, negative on error
  */
@@ -1565,6 +1583,10 @@ bfelf_file_get_entry(struct bfelf_file_t *ef, void **addr)
 
     if (addr == nullptr) {
         return bfinvalid_argument("addr == NULL");
+    }
+
+    if (ef->added == 0) {
+        return bfinvalid_argument("ef must be added to a loader first");
     }
 
     *addr = rcast(void *, ef->entry + ef->exec_virt);
@@ -1580,7 +1602,7 @@ bfelf_file_get_entry(struct bfelf_file_t *ef, void **addr)
  * @expects perm != nullptr
  * @ensures returns BFELF_SUCCESS if params == valid
  *
- * @param ef the ELF file to get the info structure for
+ * @param ef the ELF file to get the stack permission info from
  * @param perm the resulting permissions
  * @return BFELF_SUCCESS on success, negative on error
  */
@@ -1610,7 +1632,7 @@ bfelf_file_get_stack_perm(struct bfelf_file_t *ef, bfelf64_xword *perm)
  * @expects size != nullptr
  * @ensures returns BFELF_SUCCESS if params == valid
  *
- * @param ef the ELF file to get the info structure for
+ * @param ef the ELF file to get the relro info from
  * @param addr the resulting address
  * @param size the resulting size
  * @return BFELF_SUCCESS on success, negative on error
@@ -1630,6 +1652,10 @@ bfelf_file_get_relro(struct bfelf_file_t *ef, bfelf64_addr *addr, bfelf64_xword 
         return bfinvalid_argument("size == NULL");
     }
 
+    if (ef->added == 0) {
+        return bfinvalid_argument("ef must be added to a loader first");
+    }
+
     *addr = ef->relaro_vaddr + rcast(bfelf64_addr, ef->exec_virt);
     *size = ef->relaro_memsz;
     return BFELF_SUCCESS;
@@ -1644,7 +1670,7 @@ bfelf_file_get_relro(struct bfelf_file_t *ef, bfelf64_addr *addr, bfelf64_xword 
  * @expects ef != nullptr
  * @ensures returns BFELF_SUCCESS if params == valid
  *
- * @param ef the ELF file to get the info structure for
+ * @param ef the ELF file to get the number of needed files from
  * @return number of needed entries on success, negative on error
  */
 static inline int64_t
@@ -1668,7 +1694,7 @@ bfelf_file_get_num_needed(struct bfelf_file_t *ef)
  * @expects needed != nullptr
  * @ensures returns BFELF_SUCCESS if params == valid
  *
- * @param ef the ELF file to get the info structure for
+ * @param ef the ELF file to get the needed filename from
  * @param index the shared library name to get
  * @param needed the resulting needed library
  * @return number of needed entries on success, negative on error
@@ -1701,7 +1727,7 @@ bfelf_file_get_needed(struct bfelf_file_t *ef, uint64_t index, const char **need
  * @expects ef != nullptr
  * @ensures returns BFELF_SUCCESS if params == valid
  *
- * @param ef the ELF file to get the info structure for
+ * @param ef the ELF file to get the total size from
  * @return number of needed entries on success, negative on error
  */
 static inline int64_t
@@ -1723,7 +1749,7 @@ bfelf_file_get_total_size(struct bfelf_file_t *ef)
  * @expects ef != nullptr
  * @ensures returns BFELF_SUCCESS if params == valid
  *
- * @param ef the ELF file to get the info structure for
+ * @param ef the ELF file to get the pic/pie info from
  * @return 1 if compiled with PIC/PIE, 0 otherwise
  */
 static inline int64_t
@@ -1793,7 +1819,7 @@ bfelf_loader_add(
     start = rcast(bfelf64_addr, ef->exec_addr - ef->start_addr);
 
     ef->hash = add(const bfelf64_word *, ef->hash, start);
-    ef->strtab = add(const char *, ef->strtab, start);
+    ef->strtab = add(const char *, ef->strtab_offset, start);
     ef->symtab = add(const struct bfelf_sym *, ef->symtab, start);
     ef->relatab_dyn = add(const struct bfelf_rela *, ef->relatab_dyn, start);
     ef->relatab_plt = add(const struct bfelf_rela *, ef->relatab_plt, start);
@@ -1902,6 +1928,48 @@ bfelf_loader_resolve_symbol(struct bfelf_loader_t *loader, const char *name, voi
 
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef __cplusplus
+
+#include <bfgsl.h>
+
+#include <vector>
+#include <string>
+#include <exception>
+
+/**
+ * Get Needed Library List
+ *
+ * Returns the name of a shared library that is needed by this
+ * ELF file
+ *
+ * @expects ef != nullptr
+ * @ensures none
+ *
+ * @param ef the ELF file to get the list of needed files from
+ * @return list of needed files
+ */
+inline std::vector<std::string>
+bfelf_file_get_needed_list(gsl::not_null<bfelf_file_t *> ef)
+{
+    auto &&ret = 0LL;
+    auto &&needed_files = std::vector<std::string>{};
+
+    for (auto i = 0LL; i < bfelf_file_get_num_needed(ef); i++) {
+        const char *needed = nullptr;
+
+        ret = bfelf_file_get_needed(ef, static_cast<uint64_t>(i), &needed);
+        if (ret != BFELF_SUCCESS) {
+            throw std::runtime_error("bfelf_file_get_needed failed: " + std::to_string(ret));
+        }
+
+        needed_files.push_back({needed});
+    }
+
+    return needed_files;
+}
+
 #endif
 
 #pragma pack(pop)
