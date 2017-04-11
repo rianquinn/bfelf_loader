@@ -1964,7 +1964,7 @@ bfelf_file_get_needed_list(gsl::not_null<bfelf_file_t *> ef)
             throw std::runtime_error("bfelf_file_get_needed failed: " + std::to_string(ret));
         }
 
-        needed_files.push_back({needed});
+        needed_files.push_back(needed);
     }
 
     return needed_files;
