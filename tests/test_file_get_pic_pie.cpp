@@ -19,9 +19,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
-
 #include <bfelf_loader.h>
 
 TEST_CASE("bfelf_file_get_pic_pie: invalid elf file")

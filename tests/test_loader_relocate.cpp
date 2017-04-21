@@ -19,12 +19,9 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include <bfgsl.h>
-#include <bfelf_loader.h>
-
+#include <fstream>
 #include <test_real_elf.h>
 
 TEST_CASE("bfelf_loader_relocate: invalid loader")
@@ -47,8 +44,8 @@ TEST_CASE("bfelf_loader_relocate: success")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
-    ignored(details);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    ignored(binaries);
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -59,8 +56,8 @@ TEST_CASE("bfelf_loader_relocate: twice")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
-    ignored(details);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    ignored(binaries);
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -78,8 +75,8 @@ TEST_CASE("bfelf_loader_relocate: no such symbol")
     filenames.erase(filenames.begin());
     filenames.erase(filenames.begin());
 
-    auto &&details = load_libraries(&loader, filenames);
-    ignored(details);
+    auto &&binaries = bfelf_load_binaries(&g_file, filenames, &loader);
+    ignored(binaries);
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_ERROR_NO_SUCH_SYMBOL);

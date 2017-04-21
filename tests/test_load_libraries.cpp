@@ -20,19 +20,38 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 #include <catch/catch.hpp>
-#include <bfelf_loader.h>
 
-TEST_CASE("bfelf_file_get_total_size: invalid elf file")
+#include <fstream>
+#include <test_real_elf.h>
+
+TEST_CASE("bfelf_load_binaries: invalid file")
 {
-    auto ret = bfelf_file_get_total_size(nullptr);
-    CHECK(ret == BFELF_ERROR_INVALID_ARG);
+    file *f = nullptr;
+    bfelf_loader_t loader = {};
+
+    CHECK_THROWS(bfelf_load_binaries(f, g_filenames, &loader));
 }
 
-TEST_CASE("bfelf_file_get_total_size: success")
+TEST_CASE("bfelf_load_binaries: invalid loader")
 {
-    auto ret = 0LL;
-    bfelf_file_t ef = {};
+    bfelf_loader_t *loader = nullptr;
+    CHECK_THROWS(bfelf_load_binaries(&g_file, g_filenames, loader));
+}
 
-    ret = bfelf_file_get_total_size(&ef);
-    CHECK(ret == 0);
+TEST_CASE("bfelf_load_binaries: no files")
+{
+    bfelf_loader_t loader = {};
+    CHECK_NOTHROW(bfelf_load_binaries(&g_file, {}, &loader));
+}
+
+TEST_CASE("bfelf_load_binaries: invalid filename")
+{
+    bfelf_loader_t loader = {};
+    CHECK_THROWS(bfelf_load_binaries(&g_file, {"bad_file_name"_s}, &loader));
+}
+
+TEST_CASE("bfelf_load_binaries: success")
+{
+    bfelf_loader_t loader = {};
+    CHECK_NOTHROW(bfelf_load_binaries(&g_file, g_filenames, &loader));
 }

@@ -22,23 +22,12 @@
 #ifndef TEST_REAL_ELF_H
 #define TEST_REAL_ELF_H
 
+#include <bfgsl.h>
+#include <bffile.h>
+
 #include <bfelf_loader.h>
 
-#include <deque>
-#include <memory>
-
-extern const std::vector<std::string> g_filenames;
-
-std::pair<std::unique_ptr<char[]>, uint64_t>
-get_real_elf(const std::string &filename);
-
-std::pair<std::unique_ptr<char, decltype(free) *>, uint64_t>
-get_elf_exec(bfelf_file_t *ef);
-
-std::unique_ptr<char, decltype(free) *>
-add_elf_to_loader(const std::string &filename, bfelf_file_t *ef, bfelf_loader_t *loader);
-
-std::deque<std::pair<bfelf_file_t, std::unique_ptr<char, decltype(free) *>>>
-load_libraries(bfelf_loader_t *loader, const std::vector<std::string> &filenames);
+extern file g_file;
+extern std::vector<std::string> g_filenames;
 
 #endif

@@ -20,19 +20,39 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 #include <catch/catch.hpp>
-#include <bfelf_loader.h>
 
-TEST_CASE("bfelf_file_get_total_size: invalid elf file")
+#include <fstream>
+#include <test_real_elf.h>
+
+TEST_CASE("bfelf_binary: invalid file")
 {
-    auto ret = bfelf_file_get_total_size(nullptr);
-    CHECK(ret == BFELF_ERROR_INVALID_ARG);
+    file *f = nullptr;
+    CHECK_THROWS(bfelf_binary(f, g_filenames.back()));
 }
 
-TEST_CASE("bfelf_file_get_total_size: success")
+TEST_CASE("bfelf_binary: invalid filename")
 {
-    auto ret = 0LL;
-    bfelf_file_t ef = {};
+    CHECK_THROWS(bfelf_binary(&g_file, "bad_filename"));
+}
 
-    ret = bfelf_file_get_total_size(&ef);
-    CHECK(ret == 0);
+TEST_CASE("bfelf_binary: invalid ELF file")
+{
+    auto &&filename = "test.txt"_s;
+    auto &&text_data = "not an ELF file"_s;
+
+    REQUIRE_NOTHROW(g_file.write_text(filename, text_data));
+    CHECK_THROWS(bfelf_binary(&g_file, filename));
+
+    REQUIRE(std::remove(filename.c_str()) == 0);
+}
+
+TEST_CASE("bfelf_binary: success")
+{
+    auto &&binary = bfelf_binary {&g_file, g_filenames.back()};
+
+    CHECK(binary.filename() == BAREFLANK_SYSROOT_PATH + "/bin/dummy_main"_s);
+    CHECK(binary.filesize() != 0);
+    CHECK(!binary.filedata().empty());
+    CHECK(binary.execdata());
+    CHECK(binary.ef().file != nullptr);
 }

@@ -19,10 +19,9 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include <bfelf_loader.h>
+#include <fstream>
 #include <test_real_elf.h>
 
 TEST_CASE("bfelf_file_get_needed: invalid elf file")
@@ -60,7 +59,8 @@ TEST_CASE("bfelf_file_get_needed: success")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    auto &&main_binary = binaries.back();
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -68,8 +68,6 @@ TEST_CASE("bfelf_file_get_needed: success")
     const char *needed;
     uint64_t index = 0;
 
-    auto &&ef = std::get<0>(details.back());
-
-    ret = bfelf_file_get_needed(&ef, index, &needed);
+    ret = bfelf_file_get_needed(&main_binary->ef(), index, &needed);
     CHECK(ret == BFELF_SUCCESS);
 }

@@ -19,10 +19,9 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include <bfelf_loader.h>
+#include <fstream>
 #include <test_real_elf.h>
 
 TEST_CASE("bfelf_file_get_section_info: invalid elf")
@@ -55,13 +54,14 @@ TEST_CASE("bfelf_file_get_section_info: expected misc resources")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    auto &&main_binary = binaries.back();
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
 
     section_info_t info = {};
-    auto &&dummy_main_ef = details.back().first;
+    auto &&dummy_main_ef = main_binary->ef();
 
     dummy_main_ef.init = 10;
     dummy_main_ef.fini = 10;

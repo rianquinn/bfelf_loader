@@ -19,10 +19,9 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include <bfelf_loader.h>
+#include <fstream>
 #include <test_real_elf.h>
 
 std::vector<char>fake_stack(0x8000);
@@ -33,7 +32,7 @@ TEST_CASE("bfelf_loader_resolve_symbol: real test")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -44,20 +43,19 @@ TEST_CASE("bfelf_loader_resolve_symbol: real test")
     crt_info.argc = 2;
     crt_info.argv = argv.data();
 
-    for (auto &detail : details) {
-        auto &&ef = std::get<0>(detail);
+    for (auto &binary : binaries) {
         section_info_t section_info = {};
 
-        ret = bfelf_file_get_section_info(&ef, &section_info);
+        ret = bfelf_file_get_section_info(&binary->ef(), &section_info);
         CHECK(ret == BFELF_SUCCESS);
 
         crt_info.info[crt_info.info_num++] = section_info;
     }
 
-    func_t func;
-    auto &&dummy_main = details.back();
+    func_t func = nullptr;
+    auto &&dummy_main = binaries.back();
 
-    ret = bfelf_file_get_entry(&dummy_main.first, reinterpret_cast<void **>(&func));
+    ret = bfelf_file_get_entry(&dummy_main->ef(), reinterpret_cast<void **>(&func));
     CHECK(ret == BFELF_SUCCESS);
 
     CHECK(func(&fake_stack.at(0x7999), &crt_info) == 6000);

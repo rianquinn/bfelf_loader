@@ -67,6 +67,7 @@ before_script:
   - cmake ..
   - make install
   - popd
+  - rm -Rf bfsdk
 
   #
   # bfsysroot
@@ -77,6 +78,7 @@ before_script:
   - cmake -DCMAKE_TOOLCHAIN_FILE=~/bfprefix/cmake/CMakeToolchain_VMM_40.txt -DDISABLE_WARNINGS=on ..
   - make
   - popd
+  - rm -Rf bfsysroot
 
 #
 # Build Matrix
@@ -166,6 +168,20 @@ matrix:
       - make test
       - cd ..
       - bash <(curl -s https://codecov.io/bash) -t 4a2125d9-54e1-42ea-a144-0fd704a61356 -c
+
+  #
+  # LLVM SanitizerCoverage
+  #
+  - os: linux
+    env:
+      - TEST="LLVM SanitizerCoverage"
+    script:
+      - |
+        cmake \
+          -DENABLE_COVERAGE_LLVM=ON \
+          ..
+      - make install
+      - bareflank_llvm_cov.sh
 
   #
   # Google Address Sanitizer

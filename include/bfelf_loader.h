@@ -28,10 +28,11 @@
 #define BFELF_LOADER_H
 
 #include <bftypes.h>
+#include <bfdebug.h>
+#include <bfsupport.h>
+#include <bfplatform.h>
 #include <bfconstants.h>
 #include <bferrorcodes.h>
-#include <bfsupport.h>
-#include <bfdebug.h>
 
 #pragma pack(push, 1)
 
@@ -124,6 +125,9 @@ private_error(const char *header, const char *msg, const char *func, int line, i
 
 #define bfunsupported_rel(a)                                                                       \
     private_error("unsupported relocation", a, __func__, __LINE__, BFELF_ERROR_UNSUPPORTED_RELA);
+
+#define bfout_of_memory(a)                                                                         \
+    private_error("out of memory", a, __func__, __LINE__, BFELF_ERROR_OUT_OF_MEMORY);
 
 /* @endcond */
 
@@ -969,7 +973,7 @@ private_get_sym_by_name(struct bfelf_file_t *ef, const char *name, const struct 
 
 static inline int64_t
 private_get_sym_global(
-    struct bfelf_loader_t *loader,
+    const struct bfelf_loader_t *loader,
     const char *name,
     struct bfelf_file_t **ef_found,
     const struct bfelf_sym **sym)
@@ -1426,7 +1430,7 @@ bfelf_file_init(const char *file, uint64_t filesz, struct bfelf_file_t *ef)
      * ELF file to the loader, in which case we reference the string table
      * relative to the provided exec.
      */
-    ef->strtab = add(const char *, ef->strtab_offset, rcast(bfelf64_addr, file));
+    ef->strtab = cadd(const char *, ef->strtab_offset, rcast(bfelf64_addr, file));
 
     return BFELF_SUCCESS;
 
@@ -1454,7 +1458,7 @@ failure:
  * @return number of load instructions on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_num_load_instrs(struct bfelf_file_t *ef)
+bfelf_file_get_num_load_instrs(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1480,7 +1484,8 @@ bfelf_file_get_num_load_instrs(struct bfelf_file_t *ef)
  * @return BFELF_SUCCESS on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_load_instr(struct bfelf_file_t *ef, uint64_t index, struct bfelf_load_instr **instr)
+bfelf_file_get_load_instr(const struct bfelf_file_t *ef, uint64_t index,
+                          const struct bfelf_load_instr **instr)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1515,7 +1520,7 @@ bfelf_file_get_load_instr(struct bfelf_file_t *ef, uint64_t index, struct bfelf_
  * @return BFELF_SUCCESS on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_section_info(struct bfelf_file_t *ef, struct section_info_t *info)
+bfelf_file_get_section_info(const struct bfelf_file_t *ef, struct section_info_t *info)
 {
     bfelf64_word i = 0;
 
@@ -1575,7 +1580,7 @@ bfelf_file_get_section_info(struct bfelf_file_t *ef, struct section_info_t *info
  * @return BFELF_SUCCESS on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_entry(struct bfelf_file_t *ef, void **addr)
+bfelf_file_get_entry(const struct bfelf_file_t *ef, void **addr)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1607,7 +1612,7 @@ bfelf_file_get_entry(struct bfelf_file_t *ef, void **addr)
  * @return BFELF_SUCCESS on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_stack_perm(struct bfelf_file_t *ef, bfelf64_xword *perm)
+bfelf_file_get_stack_perm(const struct bfelf_file_t *ef, bfelf64_xword *perm)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1638,7 +1643,7 @@ bfelf_file_get_stack_perm(struct bfelf_file_t *ef, bfelf64_xword *perm)
  * @return BFELF_SUCCESS on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_relro(struct bfelf_file_t *ef, bfelf64_addr *addr, bfelf64_xword *size)
+bfelf_file_get_relro(const struct bfelf_file_t *ef, bfelf64_addr *addr, bfelf64_xword *size)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1674,7 +1679,7 @@ bfelf_file_get_relro(struct bfelf_file_t *ef, bfelf64_addr *addr, bfelf64_xword 
  * @return number of needed entries on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_num_needed(struct bfelf_file_t *ef)
+bfelf_file_get_num_needed(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1700,7 +1705,7 @@ bfelf_file_get_num_needed(struct bfelf_file_t *ef)
  * @return number of needed entries on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_needed(struct bfelf_file_t *ef, uint64_t index, const char **needed)
+bfelf_file_get_needed(const struct bfelf_file_t *ef, uint64_t index, const char **needed)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1731,7 +1736,7 @@ bfelf_file_get_needed(struct bfelf_file_t *ef, uint64_t index, const char **need
  * @return number of needed entries on success, negative on error
  */
 static inline int64_t
-bfelf_file_get_total_size(struct bfelf_file_t *ef)
+bfelf_file_get_total_size(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1753,7 +1758,7 @@ bfelf_file_get_total_size(struct bfelf_file_t *ef)
  * @return 1 if compiled with PIC/PIE, 0 otherwise
  */
 static inline int64_t
-bfelf_file_get_pic_pie(struct bfelf_file_t *ef)
+bfelf_file_get_pic_pie(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
         return bfinvalid_argument("ef == NULL");
@@ -1818,11 +1823,11 @@ bfelf_loader_add(
 
     start = rcast(bfelf64_addr, ef->exec_addr - ef->start_addr);
 
-    ef->hash = add(const bfelf64_word *, ef->hash, start);
-    ef->strtab = add(const char *, ef->strtab_offset, start);
-    ef->symtab = add(const struct bfelf_sym *, ef->symtab, start);
-    ef->relatab_dyn = add(const struct bfelf_rela *, ef->relatab_dyn, start);
-    ef->relatab_plt = add(const struct bfelf_rela *, ef->relatab_plt, start);
+    ef->hash = cadd(const bfelf64_word *, ef->hash, start);
+    ef->strtab = cadd(const char *, ef->strtab_offset, start);
+    ef->symtab = cadd(const struct bfelf_sym *, ef->symtab, start);
+    ef->relatab_dyn = cadd(const struct bfelf_rela *, ef->relatab_dyn, start);
+    ef->relatab_plt = cadd(const struct bfelf_rela *, ef->relatab_plt, start);
 
     ef->nbucket = ef->hash[0];
     ef->nchain = ef->hash[1];
@@ -1898,7 +1903,7 @@ bfelf_loader_relocate(struct bfelf_loader_t *loader)
  * @return BFELF_SUCCESS on success, negative on error
  */
 static inline int64_t
-bfelf_loader_resolve_symbol(struct bfelf_loader_t *loader, const char *name, void **addr)
+bfelf_loader_resolve_symbol(const struct bfelf_loader_t *loader, const char *name, void **addr)
 {
     int64_t ret = 0;
 
@@ -1926,6 +1931,91 @@ bfelf_loader_resolve_symbol(struct bfelf_loader_t *loader, const char *name, voi
     return BFELF_SUCCESS;
 }
 
+/* ---------------------------------------------------------------------------------------------- */
+/* Helper Functions                                                                               */
+/* ---------------------------------------------------------------------------------------------- */
+
+static inline int64_t
+bfelf_load_elf(
+    const char *file,                   /* In */
+    uint64_t filesz,                    /* In */
+    struct bfelf_file_t *ef,            /* Out */
+    char **exec)                        /* Out */
+{
+    int64_t i = 0;
+    int64_t ret = 0;
+    int64_t exec_size = 0;
+    int64_t num_segments = 0;
+
+    if (file == nullptr) {
+        return bfinvalid_argument("file == NULL");
+    }
+
+    if (filesz == 0) {
+        return bfinvalid_argument("file size == 0");
+    }
+
+    if (ef == nullptr) {
+        return bfinvalid_argument("ef == NULL");
+    }
+
+    if (exec == nullptr) {
+        return bfinvalid_argument("exec == NULL");
+    }
+
+    ret = bfelf_file_init(file, filesz, ef);
+    if (ret != BF_SUCCESS) {
+        return ret;
+    }
+
+    exec_size = bfelf_file_get_total_size(ef);
+    num_segments = bfelf_file_get_num_load_instrs(ef);
+
+    /*
+     * TODO:
+     *
+     * Currently we allocate RWE memory instead of W^E. This code is used in
+     * two different places, the hypervisor and guest applications. In both
+     * cases this memory is changed to W^E by either the hypervisor's memory
+     * manager, or by a set of hypercalls. The only time the memory is actually
+     * used as RWE is during the initialization of the hypervisor, and not it's
+     * normal operation.
+     *
+     * Since this has to be cross platform, most operating systems support some
+     * form of RWE so this is what we use today. The risk for attack is limited
+     * to the initialization of the hypervisor which in most cases will be
+     * performed by a root-of-trust, so the attack surface is low. Still,
+     * someday it would be nice to find an mprotect like function for all
+     * operating systems such that memory can be allocated RW, and changed
+     * to RE as needed. If this functionality is found, the code here will have
+     * to be changed to support this.
+     */
+
+    *exec = scast(char *, platform_alloc_rwe(scast(uint64_t, exec_size)));
+    if (*exec == nullptr) {
+        return bfout_of_memory("unable to allocate exec RWE memory");
+    }
+
+    platform_memset(*exec, 0, scast(uint64_t, exec_size));
+
+    for (i = 0; i < num_segments; i++) {
+        const struct bfelf_load_instr *instr = nullptr;
+
+        const char *src = nullptr;
+        char *dst = nullptr;
+
+        ret = bfelf_file_get_load_instr(ef, scast(uint64_t, i), &instr);
+        ignored(ret);
+
+        dst = add(char *, *exec, instr->mem_offset);
+        src = cadd(const char *, file, instr->file_offset);
+
+        platform_memcpy(dst, src, instr->filesz);
+    }
+
+    return BF_SUCCESS;
+}
+
 #ifdef __cplusplus
 }
 #endif
@@ -1933,9 +2023,12 @@ bfelf_loader_resolve_symbol(struct bfelf_loader_t *loader, const char *name, voi
 #ifdef __cplusplus
 
 #include <bfgsl.h>
+#include <bffile.h>
+#include <bfstring.h>
 
-#include <vector>
 #include <string>
+#include <vector>
+#include <memory>
 #include <exception>
 
 /**
@@ -1951,23 +2044,194 @@ bfelf_loader_resolve_symbol(struct bfelf_loader_t *loader, const char *name, voi
  * @return list of needed files
  */
 inline std::vector<std::string>
-bfelf_file_get_needed_list(gsl::not_null<bfelf_file_t *> ef)
+bfelf_file_get_needed_list(gsl::not_null<const bfelf_file_t *> ef)
 {
     auto &&ret = 0LL;
-    auto &&needed_files = std::vector<std::string>{};
+    auto &&needed_files = std::vector<std::string> {};
 
     for (auto i = 0LL; i < bfelf_file_get_num_needed(ef); i++) {
         const char *needed = nullptr;
 
         ret = bfelf_file_get_needed(ef, static_cast<uint64_t>(i), &needed);
         if (ret != BFELF_SUCCESS) {
-            throw std::runtime_error("bfelf_file_get_needed failed: " + std::to_string(ret));
+            throw std::runtime_error("bfelf_file_get_needed failed: " + bfn::to_string(ret, 16));
         }
 
-        needed_files.push_back(needed);
+        needed_files.emplace_back(needed);
     }
 
-    return needed_files;
+    return std::move(needed_files);
+}
+
+/**
+ * ELF Binary
+ *
+ * Encapsulates all the structures that are used for loading an ELF binary.
+ * Given a filename, this class will construct the ELF binary, and provide
+ * any of the resources that were created.
+ */
+class bfelf_binary
+{
+public:
+
+    using filename_type = std::string;                              ///< File name type
+    using filesize_type = std::size_t;                              ///< File size type
+    using filedata_type = std::vector<char>;                        ///< File data type
+    using execdata_type = std::unique_ptr<char, decltype(free) *>;  ///< File data type
+
+    /**
+     * Library Constructor
+     *
+     * @expects f != nullptr
+     * @ensures none
+     *
+     * @param f the file object to use for file operations
+     * @param filename the filename of the ELF binary to load
+     */
+    bfelf_binary(gsl::not_null<file *> f, const std::string &filename) :
+        m_filename{filename},
+        m_execdata{nullptr, free}
+    {
+        char *exec;
+        int64_t ret = 0;
+
+        m_filedata = f->read_binary(filename);
+        m_filesize = m_filedata.size();
+
+        ret = bfelf_load_elf(m_filedata.data(), m_filesize, &m_ef, &exec);
+        if (ret != BF_SUCCESS) {
+            throw std::runtime_error("failed to load ELF binary: " + filename + ": " + bfn::to_string(ret, 16));
+        }
+
+        m_execdata = execdata_type{exec, free};
+    }
+
+    /**
+     * Default Destructor
+     *
+     * @expects none
+     * @ensures none
+     */
+    ~bfelf_binary() = default;
+
+    /**
+     * File Name
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns the file name for this ELF binary
+     */
+    const filename_type &filename() const
+    { return m_filename; }
+
+    /**
+     * File Size
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns the file size for this ELF binary
+     */
+    filesize_type filesize() const
+    { return m_filesize; }
+
+    /**
+     * File Data
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns a filedata_type containing the contents of the ELF file
+     */
+    const filedata_type &filedata() const
+    { return m_filedata; }
+
+    /**
+     * Exec Data
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns an execdata_type containing the contents of the ELF
+     *     file's exec (the executable version of the ELF file)
+     */
+    const execdata_type &execdata() const
+    { return m_execdata; }
+
+    /**
+     * ELF File
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns the bfelf_file_t ELF file for this binary
+     */
+    struct bfelf_file_t &ef()
+    { return m_ef; }
+
+private:
+
+    filename_type m_filename;
+    filesize_type m_filesize;
+
+    filedata_type m_filedata;
+    execdata_type m_execdata;
+
+    struct bfelf_file_t m_ef {};
+
+public:
+
+    bfelf_binary(bfelf_binary &&) = default;                        ///< Default move construction
+    bfelf_binary &operator=(bfelf_binary &&) = default;             ///< Default move operator
+
+    bfelf_binary(const bfelf_binary &) = delete;                    ///< Deleted copy construction
+    bfelf_binary &operator=(const bfelf_binary &) = delete;         ///< Deleted copy operator
+};
+
+/**
+ * List of Binary ELF files
+ */
+using binary_list = std::vector<std::unique_ptr<bfelf_binary>>;
+
+/**
+ * Load ELF Binaries
+ *
+ * Given a list of filenames to load, this function loads each ELF binary,
+ * adds it to the provided ELF loader, and then returns a list containing
+ * all of the ELF binaries that were loaded on success. If any binary fails
+ * to load, this function throws.
+ *
+ * @expects f != nullptr
+ * @expects loader != nullptr
+ * @ensures none
+ *
+ * @param f the file object to use for file operations
+ * @param filenames list of ELF files to loader
+ * @param loader the ELF loader to add each ELF binary to
+ * @return returns list of ELF binaries that were loaded
+ */
+inline binary_list
+bfelf_load_binaries(
+    gsl::not_null<file *> f,
+    const std::vector<std::string> &filenames,
+    gsl::not_null<bfelf_loader_t *> loader)
+{
+    auto &&ret = 0LL;
+    auto &&binaries = binary_list{};
+
+    for (const auto &filename : filenames) {
+        auto &&binary = std::make_unique<bfelf_binary>(f, filename);
+
+        ret = bfelf_loader_add(loader, &binary->ef(), binary->execdata().get(), binary->execdata().get());
+        if (ret != BFELF_SUCCESS) {
+            throw std::runtime_error("failed to add EFL binary to loader: " + binary->filename() + " :" + bfn::to_string(ret, 16));
+        }
+
+        binaries.push_back(std::move(binary));
+    }
+
+    return std::move(binaries);
 }
 
 #endif

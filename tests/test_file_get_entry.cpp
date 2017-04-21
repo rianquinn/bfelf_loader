@@ -19,10 +19,9 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include <bfelf_loader.h>
+#include <fstream>
 #include <test_fake_elf.h>
 #include <test_real_elf.h>
 
@@ -73,9 +72,9 @@ TEST_CASE("bfelf_file_get_entry: success")
     void *addr = nullptr;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
-    auto &&lib1_details = details.at(0);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    auto &&lib1_binary = binaries.at(0);
 
-    ret = bfelf_file_get_entry(&lib1_details.first, &addr);
+    ret = bfelf_file_get_entry(&lib1_binary->ef(), &addr);
     CHECK(ret == BFELF_SUCCESS);
 }

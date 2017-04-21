@@ -19,10 +19,9 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include <bfelf_loader.h>
+#include <fstream>
 #include <test_real_elf.h>
 #include <test_fake_elf.h>
 
@@ -55,23 +54,23 @@ TEST_CASE("bfelf_loader_add: invalid addr")
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
-TEST_CASE("bfelf_loader_add: too many files")
-{
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
+// TEST_CASE("bfelf_loader_add: too many files")
+// {
+//     auto ret = 0LL;
+//     bfelf_loader_t loader = {};
 
-    for (auto i = 0; i < MAX_NUM_MODULES + 1; i++) {
-        bfelf_file_t dummy_misc_ef = {};
-        auto &&exec = add_elf_to_loader("/lib/libdummy_lib1.so", &dummy_misc_ef, &loader);
+//     for (auto i = 0; i < MAX_NUM_MODULES + 1; i++) {
+//         bfelf_file_t dummy_misc_ef = {};
+//         auto &&exec = add_elf_to_loader("/lib/libdummy_lib1.so", &dummy_misc_ef, &loader);
 
-        if (i < MAX_NUM_MODULES) {
-            CHECK(exec);
-        }
-        else {
-            CHECK(!exec);
-        }
-    }
-}
+//         if (i < MAX_NUM_MODULES) {
+//             CHECK(exec);
+//         }
+//         else {
+//             CHECK(!exec);
+//         }
+//     }
+// }
 
 TEST_CASE("bfelf_loader_add: add fake")
 {

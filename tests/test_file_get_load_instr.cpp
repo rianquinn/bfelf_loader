@@ -19,15 +19,12 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
-
-#include <bfelf_loader.h>
 #include <test_fake_elf.h>
 
 TEST_CASE("bfelf_file_get_load_instr: invalid elf file")
 {
-    bfelf_load_instr *instr = nullptr;
+    const bfelf_load_instr *instr = nullptr;
 
     auto ret = bfelf_file_get_load_instr(nullptr, 0, &instr);
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
@@ -37,7 +34,7 @@ TEST_CASE("bfelf_file_get_load_instr: include index")
 {
     auto ret = 0LL;
     bfelf_file_t ef = {};
-    bfelf_load_instr *instr = nullptr;
+    const bfelf_load_instr *instr = nullptr;
 
     auto &&data = get_fake_elf();
     auto &&buff = std::get<0>(data);
@@ -70,7 +67,7 @@ TEST_CASE("bfelf_file_get_load_instr: success")
 {
     auto ret = 0LL;
     bfelf_file_t ef = {};
-    bfelf_load_instr *instr = nullptr;
+    const bfelf_load_instr *instr = nullptr;
 
     auto &&data = get_fake_elf();
     auto &&buff = std::get<0>(data);

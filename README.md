@@ -24,7 +24,7 @@ including validating code coverage via
 and static / dynamic analysis via
 [Coverity](https://scan.coverity.com/projects/bareflank-hypervisor),
 [Clang Tidy](http://clang.llvm.org/extra/clang-tidy),
-[Coday](https://www.codacy.com/app/rianquinn/bfelf_loader/dashboard),
+[Codacy](https://www.codacy.com/app/rianquinn/bfelf_loader/dashboard),
 and
 [Google's Sanitizers](https://github.com/google/sanitizers).
 Finally, the code adheres to the
@@ -72,9 +72,20 @@ Specifically these headers are:
 
 ```cpp
 #include <bftypes.h>
+#include <bfdebug.h>
+#include <bfsupport.h>
+#include <bfplatform.h>
 #include <bfconstants.h>
 #include <bferrorcodes.h>
-#include <bfsupport.h>
+
+#ifdef __cplusplus
+
+#include <bfgsl.h>
+#include <bffile.h>
+#include <bfstring.h>
+
+#endif
+
 ```
 
 These headers provide generic support for types, some constants, error codes
@@ -101,7 +112,6 @@ export PATH="$HOME/bfprefix/bin/:$PATH"
 ```
 set PATH=%HOMEPATH%\bfprefix\bin;%PATH%
 ```
-
 
 ## License
 

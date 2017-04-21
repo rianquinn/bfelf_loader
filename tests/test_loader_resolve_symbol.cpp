@@ -19,12 +19,9 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include <bfgsl.h>
-#include <bfelf_loader.h>
-
+#include <fstream>
 #include <test_real_elf.h>
 
 using func_t = void (*)();
@@ -73,8 +70,8 @@ TEST_CASE("bfelf_loader_resolve_symbol: no such symbol")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
-    ignored(details);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    ignored(binaries);
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -90,8 +87,8 @@ TEST_CASE("bfelf_loader_resolve_symbol: success")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
-    ignored(details);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    ignored(binaries);
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -107,13 +104,13 @@ TEST_CASE("bfelf_loader_resolve_symbol: no such symbol no hash")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
 
-    auto &&lib1_details = details.at(0);
-    auto &&lib2_details = details.at(1);
+    auto &&lib1_details = binaries.at(0);
+    auto &&lib2_details = binaries.at(1);
 
-    lib1_details.first.hash = nullptr;
-    lib2_details.first.hash = nullptr;
+    lib1_details->ef().hash = nullptr;
+    lib2_details->ef().hash = nullptr;
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -129,13 +126,13 @@ TEST_CASE("bfelf_loader_resolve_symbol: success no hash")
     auto ret = 0LL;
     bfelf_loader_t loader = {};
 
-    auto &&details = load_libraries(&loader, g_filenames);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
 
-    auto &&lib1_details = details.at(0);
-    auto &&lib2_details = details.at(1);
+    auto &&lib1_details = binaries.at(0);
+    auto &&lib2_details = binaries.at(1);
 
-    lib1_details.first.hash = nullptr;
-    lib2_details.first.hash = nullptr;
+    lib1_details->ef().hash = nullptr;
+    lib2_details->ef().hash = nullptr;
 
     ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);

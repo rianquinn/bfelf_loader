@@ -20,19 +20,34 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 #include <catch/catch.hpp>
-#include <bfelf_loader.h>
 
-TEST_CASE("bfelf_file_get_total_size: invalid elf file")
+#include <fstream>
+#include <test_real_elf.h>
+
+TEST_CASE("bfelf_file_get_needed_list: invalid file")
 {
-    auto ret = bfelf_file_get_total_size(nullptr);
-    CHECK(ret == BFELF_ERROR_INVALID_ARG);
+    bfelf_file_t *ef = nullptr;
+    CHECK_THROWS(bfelf_file_get_needed_list(ef));
 }
 
-TEST_CASE("bfelf_file_get_total_size: success")
+TEST_CASE("bfelf_file_get_needed_list: no needed")
 {
-    auto ret = 0LL;
-    bfelf_file_t ef = {};
+    bfelf_loader_t loader = {};
 
-    ret = bfelf_file_get_total_size(&ef);
-    CHECK(ret == 0);
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    auto &&dummy_lib1 = binaries.front();
+
+    auto &&needed_list = bfelf_file_get_needed_list(&dummy_lib1->ef());
+    CHECK(needed_list.empty());
+}
+
+TEST_CASE("bfelf_file_get_needed_list: success")
+{
+    bfelf_loader_t loader = {};
+
+    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
+    auto &&dummy_main = binaries.back();
+
+    auto &&needed_list = bfelf_file_get_needed_list(&dummy_main->ef());
+    CHECK(needed_list.size() == g_filenames.size() - 1);
 }
