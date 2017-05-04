@@ -56,6 +56,13 @@ platform_alloc_rwe(uint64_t len)
     return addr;
 }
 
+void
+platform_free_rwe(void *addr, uint64_t len)
+{
+    bfignored(len);
+    free(addr);
+}
+
 void *
 platform_memset(void *ptr, char value, uint64_t num)
 { return memset(ptr, value, num); }

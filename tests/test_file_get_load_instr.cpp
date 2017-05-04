@@ -32,15 +32,15 @@ TEST_CASE("bfelf_file_get_load_instr: invalid elf file")
 
 TEST_CASE("bfelf_file_get_load_instr: include index")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_file_t ef = {};
     const bfelf_load_instr *instr = nullptr;
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_load_instr(&ef, 10, &instr);
@@ -49,14 +49,14 @@ TEST_CASE("bfelf_file_get_load_instr: include index")
 
 TEST_CASE("bfelf_file_get_load_instr: invalid instr")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_file_t ef = {};
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_load_instr(&ef, 0, nullptr);
@@ -65,15 +65,15 @@ TEST_CASE("bfelf_file_get_load_instr: invalid instr")
 
 TEST_CASE("bfelf_file_get_load_instr: success")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_file_t ef = {};
     const bfelf_load_instr *instr = nullptr;
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_load_instr(&ef, 0, &instr);

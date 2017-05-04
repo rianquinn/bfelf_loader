@@ -32,14 +32,14 @@ TEST_CASE("bfelf_file_get_stack_perm: invalid elf file")
 
 TEST_CASE("bfelf_file_get_stack_perm: invalid addr")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_file_t ef = {};
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_stack_perm(&ef, nullptr);
@@ -48,15 +48,15 @@ TEST_CASE("bfelf_file_get_stack_perm: invalid addr")
 
 TEST_CASE("bfelf_file_get_stack_perm: success")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_file_t ef = {};
     bfelf64_xword perm = 0;
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_stack_perm(&ef, &perm);

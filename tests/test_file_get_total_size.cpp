@@ -30,9 +30,8 @@ TEST_CASE("bfelf_file_get_total_size: invalid elf file")
 
 TEST_CASE("bfelf_file_get_total_size: success")
 {
-    auto ret = 0LL;
     bfelf_file_t ef = {};
 
-    ret = bfelf_file_get_total_size(&ef);
+    auto ret = bfelf_file_get_total_size(&ef);
     CHECK(ret == 0);
 }

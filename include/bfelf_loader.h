@@ -98,7 +98,7 @@ using bfelf64_sxword = int64_t;
 static inline int64_t
 private_error(const char *header, const char *msg, const char *func, int line, int64_t code)
 {
-    ALERT("%s [%d] %s: %s\n", func, line, header, msg);
+    BFALERT("%s [%d] %s: %s\n", func, line, header, msg);
     return code;
 }
 
@@ -296,17 +296,17 @@ struct bfelf_file_t {
  *
  * @cond
  */
-#define bfei_mag0 scast(bfelf64_sword, 0)
-#define bfei_mag1 scast(bfelf64_sword, 1)
-#define bfei_mag2 scast(bfelf64_sword, 2)
-#define bfei_mag3 scast(bfelf64_sword, 3)
-#define bfei_class scast(bfelf64_sword, 4)
-#define bfei_data scast(bfelf64_sword, 5)
-#define bfei_version scast(bfelf64_sword, 6)
-#define bfei_osabi scast(bfelf64_sword, 7)
-#define bfei_abiversion scast(bfelf64_sword, 8)
-#define bfei_pad scast(bfelf64_sword, 9)
-#define bfei_nident scast(bfelf64_sword, 16)
+#define bfei_mag0 bfscast(bfelf64_sword, 0)
+#define bfei_mag1 bfscast(bfelf64_sword, 1)
+#define bfei_mag2 bfscast(bfelf64_sword, 2)
+#define bfei_mag3 bfscast(bfelf64_sword, 3)
+#define bfei_class bfscast(bfelf64_sword, 4)
+#define bfei_data bfscast(bfelf64_sword, 5)
+#define bfei_version bfscast(bfelf64_sword, 6)
+#define bfei_osabi bfscast(bfelf64_sword, 7)
+#define bfei_abiversion bfscast(bfelf64_sword, 8)
+#define bfei_pad bfscast(bfelf64_sword, 9)
+#define bfei_nident bfscast(bfelf64_sword, 16)
 
 /* @endcond */
 
@@ -318,8 +318,8 @@ struct bfelf_file_t {
  *
  * @cond
  */
-#define bfelfclass32 scast(unsigned char, 1)
-#define bfelfclass64 scast(unsigned char, 2)
+#define bfelfclass32 bfscast(unsigned char, 1)
+#define bfelfclass64 bfscast(unsigned char, 2)
 
 /* @endcond */
 
@@ -331,8 +331,8 @@ struct bfelf_file_t {
  *
  * @cond
  */
-#define bfelfdata2lsb scast(unsigned char, 1)
-#define bfelfdata2msb scast(unsigned char, 2)
+#define bfelfdata2lsb bfscast(unsigned char, 1)
+#define bfelfdata2msb bfscast(unsigned char, 2)
 
 /* @endcond */
 
@@ -344,7 +344,7 @@ struct bfelf_file_t {
  *
  * @cond
  */
-#define bfev_current scast(unsigned char, 1)
+#define bfev_current bfscast(unsigned char, 1)
 
 /* @endcond */
 
@@ -356,9 +356,9 @@ struct bfelf_file_t {
  *
  * @cond
  */
-#define bfelfosabi_sysv scast(unsigned char, 0)
-#define bfelfosabi_hpux scast(unsigned char, 1)
-#define bfelfosabi_standalone scast(unsigned char, 255)
+#define bfelfosabi_sysv bfscast(unsigned char, 0)
+#define bfelfosabi_hpux bfscast(unsigned char, 1)
+#define bfelfosabi_standalone bfscast(unsigned char, 255)
 
 /* @endcond */
 
@@ -370,15 +370,15 @@ struct bfelf_file_t {
  *
  * @cond
  */
-#define bfet_none scast(bfelf64_half, 0)
-#define bfet_rel scast(bfelf64_half, 1)
-#define bfet_exec scast(bfelf64_half, 2)
-#define bfet_dyn scast(bfelf64_half, 3)
-#define bfet_core scast(bfelf64_half, 4)
-#define bfet_loos scast(bfelf64_half, 0xFE00)
-#define bfet_hios scast(bfelf64_half, 0xFEFF)
-#define bfet_loproc scast(bfelf64_half, 0xFF00)
-#define bfet_hiproc scast(bfelf64_half, 0xFFFF)
+#define bfet_none bfscast(bfelf64_half, 0)
+#define bfet_rel bfscast(bfelf64_half, 1)
+#define bfet_exec bfscast(bfelf64_half, 2)
+#define bfet_dyn bfscast(bfelf64_half, 3)
+#define bfet_core bfscast(bfelf64_half, 4)
+#define bfet_loos bfscast(bfelf64_half, 0xFE00)
+#define bfet_hios bfscast(bfelf64_half, 0xFEFF)
+#define bfet_loproc bfscast(bfelf64_half, 0xFF00)
+#define bfet_hiproc bfscast(bfelf64_half, 0xFFFF)
 
 /* @endcond */
 
@@ -390,45 +390,45 @@ struct bfelf_file_t {
  *
  * @cond
  */
-#define bfem_none scast(bfelf64_half, 0)
-#define bfem_m32 scast(bfelf64_half, 1)
-#define bfem_sparc scast(bfelf64_half, 2)
-#define bfem_386 scast(bfelf64_half, 3)
-#define bfem_68k scast(bfelf64_half, 4)
-#define bfem_88k scast(bfelf64_half, 5)
-#define bfem_486 scast(bfelf64_half, 6)
-#define bfem_860 scast(bfelf64_half, 7)
-#define bfem_mips scast(bfelf64_half, 8)
-#define bfem_mips_rs3_le scast(bfelf64_half, 10)
-#define bfem_mips_rs4_be scast(bfelf64_half, 11)
-#define bfem_parisc scast(bfelf64_half, 15)
-#define bfem_sparc32plus scast(bfelf64_half, 18)
-#define bfem_ppc scast(bfelf64_half, 20)
-#define bfem_ppc64 scast(bfelf64_half, 21)
-#define bfem_spu scast(bfelf64_half, 23)
-#define bfem_arm scast(bfelf64_half, 40)
-#define bfem_sh scast(bfelf64_half, 42)
-#define bfem_sparcv9 scast(bfelf64_half, 43)
-#define bfem_h8_300 scast(bfelf64_half, 46)
-#define bfem_ia_64 scast(bfelf64_half, 50)
-#define bfem_x86_64 scast(bfelf64_half, 62)
-#define bfem_s390 scast(bfelf64_half, 22)
-#define bfem_cris scast(bfelf64_half, 76)
-#define bfem_v850 scast(bfelf64_half, 87)
-#define bfem_m32r scast(bfelf64_half, 88)
-#define bfem_mn10300 scast(bfelf64_half, 89)
-#define bfem_openrisc scast(bfelf64_half, 92)
-#define bfem_blackfin scast(bfelf64_half, 106)
-#define bfem_altera_nios2 scast(bfelf64_half, 113)
-#define bfem_ti_c6000 scast(bfelf64_half, 140)
-#define bfem_aarch64 scast(bfelf64_half, 183)
-#define bfem_frv scast(bfelf64_half, 0x5441)
-#define bfem_avr32 scast(bfelf64_half, 0x18AD)
-#define bfem_alpha scast(bfelf64_half, 0x9026)
-#define bfem_cygnus_v850 scast(bfelf64_half, 0x9080)
-#define bfem_cygnus_m32r scast(bfelf64_half, 0x9041)
-#define bfem_s390_old scast(bfelf64_half, 0xA390)
-#define bfem_cygnus_mn10300 scast(bfelf64_half, 0xBEEF)
+#define bfem_none bfscast(bfelf64_half, 0)
+#define bfem_m32 bfscast(bfelf64_half, 1)
+#define bfem_sparc bfscast(bfelf64_half, 2)
+#define bfem_386 bfscast(bfelf64_half, 3)
+#define bfem_68k bfscast(bfelf64_half, 4)
+#define bfem_88k bfscast(bfelf64_half, 5)
+#define bfem_486 bfscast(bfelf64_half, 6)
+#define bfem_860 bfscast(bfelf64_half, 7)
+#define bfem_mips bfscast(bfelf64_half, 8)
+#define bfem_mips_rs3_le bfscast(bfelf64_half, 10)
+#define bfem_mips_rs4_be bfscast(bfelf64_half, 11)
+#define bfem_parisc bfscast(bfelf64_half, 15)
+#define bfem_sparc32plus bfscast(bfelf64_half, 18)
+#define bfem_ppc bfscast(bfelf64_half, 20)
+#define bfem_ppc64 bfscast(bfelf64_half, 21)
+#define bfem_spu bfscast(bfelf64_half, 23)
+#define bfem_arm bfscast(bfelf64_half, 40)
+#define bfem_sh bfscast(bfelf64_half, 42)
+#define bfem_sparcv9 bfscast(bfelf64_half, 43)
+#define bfem_h8_300 bfscast(bfelf64_half, 46)
+#define bfem_ia_64 bfscast(bfelf64_half, 50)
+#define bfem_x86_64 bfscast(bfelf64_half, 62)
+#define bfem_s390 bfscast(bfelf64_half, 22)
+#define bfem_cris bfscast(bfelf64_half, 76)
+#define bfem_v850 bfscast(bfelf64_half, 87)
+#define bfem_m32r bfscast(bfelf64_half, 88)
+#define bfem_mn10300 bfscast(bfelf64_half, 89)
+#define bfem_openrisc bfscast(bfelf64_half, 92)
+#define bfem_blackfin bfscast(bfelf64_half, 106)
+#define bfem_altera_nios2 bfscast(bfelf64_half, 113)
+#define bfem_ti_c6000 bfscast(bfelf64_half, 140)
+#define bfem_aarch64 bfscast(bfelf64_half, 183)
+#define bfem_frv bfscast(bfelf64_half, 0x5441)
+#define bfem_avr32 bfscast(bfelf64_half, 0x18AD)
+#define bfem_alpha bfscast(bfelf64_half, 0x9026)
+#define bfem_cygnus_v850 bfscast(bfelf64_half, 0x9080)
+#define bfem_cygnus_m32r bfscast(bfelf64_half, 0x9041)
+#define bfem_s390_old bfscast(bfelf64_half, 0xA390)
+#define bfem_cygnus_mn10300 bfscast(bfelf64_half, 0xBEEF)
 
 /* @endcond */
 
@@ -474,25 +474,25 @@ struct bfelf_ehdr {
  *
  * @cond
  */
-#define bfsht_null scast(bfelf64_word, 0)
-#define bfsht_progbits scast(bfelf64_word, 1)
-#define bfsht_symtab scast(bfelf64_word, 2)
-#define bfsht_strtab scast(bfelf64_word, 3)
-#define bfsht_rela scast(bfelf64_word, 4)
-#define bfsht_hash scast(bfelf64_word, 5)
-#define bfsht_dynamic scast(bfelf64_word, 6)
-#define bfsht_note scast(bfelf64_word, 7)
-#define bfsht_nobits scast(bfelf64_word, 8)
-#define bfsht_rel scast(bfelf64_word, 9)
-#define bfsht_shlib scast(bfelf64_word, 10)
-#define bfsht_dynsym scast(bfelf64_word, 11)
-#define bfsht_init_array scast(bfelf64_word, 14)
-#define bfsht_fini_array scast(bfelf64_word, 15)
-#define bfsht_loos scast(bfelf64_word, 0x60000000)
-#define bfsht_hios scast(bfelf64_word, 0x6FFFFFFF)
-#define bfsht_loproc scast(bfelf64_word, 0x70000000)
-#define bfsht_x86_64_unwind scast(bfelf64_word, 0x70000001)
-#define bfsht_hiproc scast(bfelf64_word, 0x7FFFFFFF)
+#define bfsht_null bfscast(bfelf64_word, 0)
+#define bfsht_progbits bfscast(bfelf64_word, 1)
+#define bfsht_symtab bfscast(bfelf64_word, 2)
+#define bfsht_strtab bfscast(bfelf64_word, 3)
+#define bfsht_rela bfscast(bfelf64_word, 4)
+#define bfsht_hash bfscast(bfelf64_word, 5)
+#define bfsht_dynamic bfscast(bfelf64_word, 6)
+#define bfsht_note bfscast(bfelf64_word, 7)
+#define bfsht_nobits bfscast(bfelf64_word, 8)
+#define bfsht_rel bfscast(bfelf64_word, 9)
+#define bfsht_shlib bfscast(bfelf64_word, 10)
+#define bfsht_dynsym bfscast(bfelf64_word, 11)
+#define bfsht_init_array bfscast(bfelf64_word, 14)
+#define bfsht_fini_array bfscast(bfelf64_word, 15)
+#define bfsht_loos bfscast(bfelf64_word, 0x60000000)
+#define bfsht_hios bfscast(bfelf64_word, 0x6FFFFFFF)
+#define bfsht_loproc bfscast(bfelf64_word, 0x70000000)
+#define bfsht_x86_64_unwind bfscast(bfelf64_word, 0x70000001)
+#define bfsht_hiproc bfscast(bfelf64_word, 0x7FFFFFFF)
 
 /* @endcond */
 
@@ -504,12 +504,12 @@ struct bfelf_ehdr {
  *
  * @cond
  */
-#define bfshf_write scast(bfelf64_xword, 0x1)
-#define bfshf_alloc scast(bfelf64_xword, 0x2)
-#define bfshf_execinstr scast(bfelf64_xword, 0x4)
-#define bfshf_maskos scast(bfelf64_xword, 0x0F000000)
-#define bfshf_maskproc scast(bfelf64_xword, 0xF0000000)
-#define bfshf_undocumneted scast(bfelf64_xword, 0x00000060)
+#define bfshf_write bfscast(bfelf64_xword, 0x1)
+#define bfshf_alloc bfscast(bfelf64_xword, 0x2)
+#define bfshf_execinstr bfscast(bfelf64_xword, 0x4)
+#define bfshf_maskos bfscast(bfelf64_xword, 0x0F000000)
+#define bfshf_maskproc bfscast(bfelf64_xword, 0xF0000000)
+#define bfshf_undocumneted bfscast(bfelf64_xword, 0x00000060)
 
 #define bfshf_a (bfshf_alloc)
 #define bfshf_wa (bfshf_write | bfshf_alloc)
@@ -556,70 +556,70 @@ struct bfelf_shdr {
  *
  * @cond
  */
-#define bfdt_null scast(bfelf64_xword, 0)
-#define bfdt_needed scast(bfelf64_xword, 1)
-#define bfdt_pltrelsz scast(bfelf64_xword, 2)
-#define bfdt_pltgot scast(bfelf64_xword, 3)
-#define bfdt_hash scast(bfelf64_xword, 4)
-#define bfdt_strtab scast(bfelf64_xword, 5)
-#define bfdt_symtab scast(bfelf64_xword, 6)
-#define bfdt_rela scast(bfelf64_xword, 7)
-#define bfdt_relasz scast(bfelf64_xword, 8)
-#define bfdt_relaent scast(bfelf64_xword, 9)
-#define bfdt_strsz scast(bfelf64_xword, 10)
-#define bfdt_syment scast(bfelf64_xword, 11)
-#define bfdt_init scast(bfelf64_xword, 12)
-#define bfdt_fini scast(bfelf64_xword, 13)
-#define bfdt_soname scast(bfelf64_xword, 14)
-#define bfdt_rpath scast(bfelf64_xword, 15)
-#define bfdt_symbolic scast(bfelf64_xword, 16)
-#define bfdt_rel scast(bfelf64_xword, 17)
-#define bfdt_relsz scast(bfelf64_xword, 18)
-#define bfdt_relent scast(bfelf64_xword, 19)
-#define bfdt_pltrel scast(bfelf64_xword, 20)
-#define bfdt_debug scast(bfelf64_xword, 21)
-#define bfdt_textrel scast(bfelf64_xword, 22)
-#define bfdt_jmprel scast(bfelf64_xword, 23)
-#define bfdt_bind_now scast(bfelf64_xword, 24)
-#define bfdt_init_array scast(bfelf64_xword, 25)
-#define bfdt_fini_array scast(bfelf64_xword, 26)
-#define bfdt_init_arraysz scast(bfelf64_xword, 27)
-#define bfdt_fini_arraysz scast(bfelf64_xword, 28)
-#define bfdt_loos scast(bfelf64_xword, 0x60000000)
-#define bfdt_relacount scast(bfelf64_xword, 0x6ffffff9)
-#define bfdt_relcount scast(bfelf64_xword, 0x6ffffffa)
-#define bfdt_flags_1 scast(bfelf64_xword, 0x6ffffffb)
-#define bfdt_hios scast(bfelf64_xword, 0x6FFFFFFF)
-#define bfdt_loproc scast(bfelf64_xword, 0x70000000)
-#define bfdt_hiproc scast(bfelf64_xword, 0x7FFFFFFF)
+#define bfdt_null bfscast(bfelf64_xword, 0)
+#define bfdt_needed bfscast(bfelf64_xword, 1)
+#define bfdt_pltrelsz bfscast(bfelf64_xword, 2)
+#define bfdt_pltgot bfscast(bfelf64_xword, 3)
+#define bfdt_hash bfscast(bfelf64_xword, 4)
+#define bfdt_strtab bfscast(bfelf64_xword, 5)
+#define bfdt_symtab bfscast(bfelf64_xword, 6)
+#define bfdt_rela bfscast(bfelf64_xword, 7)
+#define bfdt_relasz bfscast(bfelf64_xword, 8)
+#define bfdt_relaent bfscast(bfelf64_xword, 9)
+#define bfdt_strsz bfscast(bfelf64_xword, 10)
+#define bfdt_syment bfscast(bfelf64_xword, 11)
+#define bfdt_init bfscast(bfelf64_xword, 12)
+#define bfdt_fini bfscast(bfelf64_xword, 13)
+#define bfdt_soname bfscast(bfelf64_xword, 14)
+#define bfdt_rpath bfscast(bfelf64_xword, 15)
+#define bfdt_symbolic bfscast(bfelf64_xword, 16)
+#define bfdt_rel bfscast(bfelf64_xword, 17)
+#define bfdt_relsz bfscast(bfelf64_xword, 18)
+#define bfdt_relent bfscast(bfelf64_xword, 19)
+#define bfdt_pltrel bfscast(bfelf64_xword, 20)
+#define bfdt_debug bfscast(bfelf64_xword, 21)
+#define bfdt_textrel bfscast(bfelf64_xword, 22)
+#define bfdt_jmprel bfscast(bfelf64_xword, 23)
+#define bfdt_bind_now bfscast(bfelf64_xword, 24)
+#define bfdt_init_array bfscast(bfelf64_xword, 25)
+#define bfdt_fini_array bfscast(bfelf64_xword, 26)
+#define bfdt_init_arraysz bfscast(bfelf64_xword, 27)
+#define bfdt_fini_arraysz bfscast(bfelf64_xword, 28)
+#define bfdt_loos bfscast(bfelf64_xword, 0x60000000)
+#define bfdt_relacount bfscast(bfelf64_xword, 0x6ffffff9)
+#define bfdt_relcount bfscast(bfelf64_xword, 0x6ffffffa)
+#define bfdt_flags_1 bfscast(bfelf64_xword, 0x6ffffffb)
+#define bfdt_hios bfscast(bfelf64_xword, 0x6FFFFFFF)
+#define bfdt_loproc bfscast(bfelf64_xword, 0x70000000)
+#define bfdt_hiproc bfscast(bfelf64_xword, 0x7FFFFFFF)
 
-#define bfdf_1_now scast(bfelf64_xword, 0x00000001)
-#define bfdf_1_global scast(bfelf64_xword, 0x00000002)
-#define bfdf_1_group scast(bfelf64_xword, 0x00000004)
-#define bfdf_1_nodelete scast(bfelf64_xword, 0x00000008)
-#define bfdf_1_loadfltr scast(bfelf64_xword, 0x00000010)
-#define bfdf_1_initfirst scast(bfelf64_xword, 0x00000020)
-#define bfdf_1_noopen scast(bfelf64_xword, 0x00000040)
-#define bfdf_1_origin scast(bfelf64_xword, 0x00000080)
-#define bfdf_1_direct scast(bfelf64_xword, 0x00000100)
-#define bfdf_1_trans scast(bfelf64_xword, 0x00000200)
-#define bfdf_1_interpose scast(bfelf64_xword, 0x00000400)
-#define bfdf_1_nodeflib scast(bfelf64_xword, 0x00000800)
-#define bfdf_1_nodump scast(bfelf64_xword, 0x00001000)
-#define bfdf_1_confalt scast(bfelf64_xword, 0x00002000)
-#define bfdf_1_endfiltee scast(bfelf64_xword, 0x00004000)
-#define bfdf_1_dispreldne scast(bfelf64_xword, 0x00008000)
-#define bfdf_1_disprelpnd scast(bfelf64_xword, 0x00010000)
-#define bfdf_1_nodirect scast(bfelf64_xword, 0x00020000)
-#define bfdf_1_ignmuldef scast(bfelf64_xword, 0x00040000)
-#define bfdf_1_noksyms scast(bfelf64_xword, 0x00080000)
-#define bfdf_1_nohdr scast(bfelf64_xword, 0x00100000)
-#define bfdf_1_edited scast(bfelf64_xword, 0x00200000)
-#define bfdf_1_noreloc scast(bfelf64_xword, 0x00400000)
-#define bfdf_1_symintpose scast(bfelf64_xword, 0x00800000)
-#define bfdf_1_globaudit scast(bfelf64_xword, 0x01000000)
-#define bfdf_1_singleton scast(bfelf64_xword, 0x02000000)
-#define bfdf_1_pie scast(bfelf64_xword, 0x08000000)
+#define bfdf_1_now bfscast(bfelf64_xword, 0x00000001)
+#define bfdf_1_global bfscast(bfelf64_xword, 0x00000002)
+#define bfdf_1_group bfscast(bfelf64_xword, 0x00000004)
+#define bfdf_1_nodelete bfscast(bfelf64_xword, 0x00000008)
+#define bfdf_1_loadfltr bfscast(bfelf64_xword, 0x00000010)
+#define bfdf_1_initfirst bfscast(bfelf64_xword, 0x00000020)
+#define bfdf_1_noopen bfscast(bfelf64_xword, 0x00000040)
+#define bfdf_1_origin bfscast(bfelf64_xword, 0x00000080)
+#define bfdf_1_direct bfscast(bfelf64_xword, 0x00000100)
+#define bfdf_1_trans bfscast(bfelf64_xword, 0x00000200)
+#define bfdf_1_interpose bfscast(bfelf64_xword, 0x00000400)
+#define bfdf_1_nodeflib bfscast(bfelf64_xword, 0x00000800)
+#define bfdf_1_nodump bfscast(bfelf64_xword, 0x00001000)
+#define bfdf_1_confalt bfscast(bfelf64_xword, 0x00002000)
+#define bfdf_1_endfiltee bfscast(bfelf64_xword, 0x00004000)
+#define bfdf_1_dispreldne bfscast(bfelf64_xword, 0x00008000)
+#define bfdf_1_disprelpnd bfscast(bfelf64_xword, 0x00010000)
+#define bfdf_1_nodirect bfscast(bfelf64_xword, 0x00020000)
+#define bfdf_1_ignmuldef bfscast(bfelf64_xword, 0x00040000)
+#define bfdf_1_noksyms bfscast(bfelf64_xword, 0x00080000)
+#define bfdf_1_nohdr bfscast(bfelf64_xword, 0x00100000)
+#define bfdf_1_edited bfscast(bfelf64_xword, 0x00200000)
+#define bfdf_1_noreloc bfscast(bfelf64_xword, 0x00400000)
+#define bfdf_1_symintpose bfscast(bfelf64_xword, 0x00800000)
+#define bfdf_1_globaudit bfscast(bfelf64_xword, 0x01000000)
+#define bfdf_1_singleton bfscast(bfelf64_xword, 0x02000000)
+#define bfdf_1_pie bfscast(bfelf64_xword, 0x08000000)
 
 /* @endcond */
 
@@ -655,13 +655,13 @@ struct bfelf_dyn {
  *
  * @cond
  */
-#define bfstb_local scast(unsigned char, 0)
-#define bfstb_global scast(unsigned char, 1)
-#define bfstb_weak scast(unsigned char, 2)
-#define bfstb_loos scast(unsigned char, 10)
-#define bfstb_hios scast(unsigned char, 12)
-#define bfstb_loproc scast(unsigned char, 13)
-#define bfstb_hiproc scast(unsigned char, 15)
+#define bfstb_local bfscast(unsigned char, 0)
+#define bfstb_global bfscast(unsigned char, 1)
+#define bfstb_weak bfscast(unsigned char, 2)
+#define bfstb_loos bfscast(unsigned char, 10)
+#define bfstb_hios bfscast(unsigned char, 12)
+#define bfstb_loproc bfscast(unsigned char, 13)
+#define bfstb_hiproc bfscast(unsigned char, 15)
 
 /* @endcond */
 
@@ -673,15 +673,15 @@ struct bfelf_dyn {
  *
  * @cond
  */
-#define bfstt_notype scast(unsigned char, 0)
-#define bfstt_object scast(unsigned char, 1)
-#define bfstt_func scast(unsigned char, 2)
-#define bfstt_section scast(unsigned char, 3)
-#define bfstt_file scast(unsigned char, 4)
-#define bfstt_loos scast(unsigned char, 10)
-#define bfstt_hios scast(unsigned char, 12)
-#define bfstt_loproc scast(unsigned char, 13)
-#define bfstt_hiproc scast(unsigned char, 15)
+#define bfstt_notype bfscast(unsigned char, 0)
+#define bfstt_object bfscast(unsigned char, 1)
+#define bfstt_func bfscast(unsigned char, 2)
+#define bfstt_section bfscast(unsigned char, 3)
+#define bfstt_file bfscast(unsigned char, 4)
+#define bfstt_loos bfscast(unsigned char, 10)
+#define bfstt_hios bfscast(unsigned char, 12)
+#define bfstt_loproc bfscast(unsigned char, 13)
+#define bfstt_hiproc bfscast(unsigned char, 15)
 
 /* @endcond */
 
@@ -741,10 +741,10 @@ struct bfelf_sym {
  *
  * @cond
  */
-#define BFR_X86_64_64 scast(bfelf64_xword, 1)
-#define BFR_X86_64_GLOB_DAT scast(bfelf64_xword, 6)
-#define BFR_X86_64_JUMP_SLOT scast(bfelf64_xword, 7)
-#define BFR_X86_64_RELATIVE scast(bfelf64_xword, 8)
+#define BFR_X86_64_64 bfscast(bfelf64_xword, 1)
+#define BFR_X86_64_GLOB_DAT bfscast(bfelf64_xword, 6)
+#define BFR_X86_64_JUMP_SLOT bfscast(bfelf64_xword, 7)
+#define BFR_X86_64_RELATIVE bfscast(bfelf64_xword, 8)
 
 /* @endcond */
 
@@ -804,20 +804,20 @@ struct bfelf_rela {
  *
  * @cond
  */
-#define bfpt_null scast(bfelf64_word, 0)
-#define bfpt_load scast(bfelf64_word, 1)
-#define bfpt_dynamic scast(bfelf64_word, 2)
-#define bfpt_interp scast(bfelf64_word, 3)
-#define bfpt_note scast(bfelf64_word, 4)
-#define bfpt_shlib scast(bfelf64_word, 5)
-#define bfpt_phdr scast(bfelf64_word, 6)
-#define bfpt_loos scast(bfelf64_word, 0x60000000)
-#define bfpt_gnu_eh_frame scast(bfelf64_word, 0x6474e550)
-#define bfpt_gnu_stack scast(bfelf64_word, 0x6474e551)
-#define bfpt_gnu_relro scast(bfelf64_word, 0x6474e552)
-#define bfpt_hios scast(bfelf64_word, 0x6FFFFFFF)
-#define bfpt_loproc scast(bfelf64_word, 0x70000000)
-#define bfpt_hiproc scast(bfelf64_word, 0x7FFFFFFF)
+#define bfpt_null bfscast(bfelf64_word, 0)
+#define bfpt_load bfscast(bfelf64_word, 1)
+#define bfpt_dynamic bfscast(bfelf64_word, 2)
+#define bfpt_interp bfscast(bfelf64_word, 3)
+#define bfpt_note bfscast(bfelf64_word, 4)
+#define bfpt_shlib bfscast(bfelf64_word, 5)
+#define bfpt_phdr bfscast(bfelf64_word, 6)
+#define bfpt_loos bfscast(bfelf64_word, 0x60000000)
+#define bfpt_gnu_eh_frame bfscast(bfelf64_word, 0x6474e550)
+#define bfpt_gnu_stack bfscast(bfelf64_word, 0x6474e551)
+#define bfpt_gnu_relro bfscast(bfelf64_word, 0x6474e552)
+#define bfpt_hios bfscast(bfelf64_word, 0x6FFFFFFF)
+#define bfpt_loproc bfscast(bfelf64_word, 0x70000000)
+#define bfpt_hiproc bfscast(bfelf64_word, 0x7FFFFFFF)
 
 /* @endcond */
 
@@ -829,11 +829,11 @@ struct bfelf_rela {
  *
  * @cond
  */
-#define bfpf_x scast(bfelf64_xword, 0x1)
-#define bfpf_w scast(bfelf64_xword, 0x2)
-#define bfpf_r scast(bfelf64_xword, 0x4)
-#define bfpf_maskos scast(bfelf64_xword, 0x00FF0000)
-#define bfpf_maskproc scast(bfelf64_xword, 0xFF000000)
+#define bfpf_x bfscast(bfelf64_xword, 0x1)
+#define bfpf_w bfscast(bfelf64_xword, 0x2)
+#define bfpf_r bfscast(bfelf64_xword, 0x4)
+#define bfpf_maskos bfscast(bfelf64_xword, 0x00FF0000)
+#define bfpf_maskproc bfscast(bfelf64_xword, 0xFF000000)
 
 /* @endcond */
 
@@ -899,7 +899,7 @@ private_hash(const char *name)
     while (*name != 0) {
         char c = *name++;
         unsigned long g;
-        unsigned char uc = scast(unsigned char, c);
+        unsigned char uc = bfscast(unsigned char, c);
 
         if (c >= 0) {
             h = (h << 4) + uc;
@@ -1032,10 +1032,10 @@ private_relocate_symbol(
     const char *str = nullptr;
     const struct bfelf_sym *found_sym = nullptr;
     struct bfelf_file_t *found_ef = ef;
-    bfelf64_addr *ptr = rcast(bfelf64_addr *, ef->exec_addr + rela->r_offset - ef->start_addr);
+    bfelf64_addr *ptr = bfrcast(bfelf64_addr *, ef->exec_addr + rela->r_offset - ef->start_addr);
 
     if (BFELF_REL_TYPE(rela->r_info) == BFR_X86_64_RELATIVE) {
-        *ptr = rcast(bfelf64_addr, ef->exec_virt + rela->r_addend);
+        *ptr = bfrcast(bfelf64_addr, ef->exec_virt + rela->r_addend);
         return BFELF_SUCCESS;
     }
 
@@ -1055,11 +1055,11 @@ private_relocate_symbol(
         }
     }
 
-    *ptr = rcast(bfelf64_addr, found_ef->exec_virt + found_sym->st_value);
+    *ptr = bfrcast(bfelf64_addr, found_ef->exec_virt + found_sym->st_value);
 
     switch (BFELF_REL_TYPE(rela->r_info)) {
         case BFR_X86_64_64:
-            *ptr += scast(bfelf64_addr, rela->r_addend);
+            *ptr += bfscast(bfelf64_addr, rela->r_addend);
             break;
 
         case BFR_X86_64_GLOB_DAT:
@@ -1235,7 +1235,7 @@ private_process_dynamic_section(struct bfelf_file_t *ef)
     }
 
     ef->num_needed = 0;
-    ef->dyntab = rcast(const struct bfelf_dyn *, ef->file + ef->dynoff);
+    ef->dyntab = bfrcast(const struct bfelf_dyn *, ef->file + ef->dynoff);
 
     for (i = 0; i < ef->dynnum; i++) {
         const struct bfelf_dyn *dyn = &(ef->dyntab[i]);
@@ -1257,19 +1257,19 @@ private_process_dynamic_section(struct bfelf_file_t *ef)
                 break;
 
             case bfdt_hash:
-                ef->hash = rcast(bfelf64_word *, dyn->d_val);
+                ef->hash = bfrcast(bfelf64_word *, dyn->d_val);
                 break;
 
             case bfdt_strtab:
-                ef->strtab_offset = rcast(char *, dyn->d_val);
+                ef->strtab_offset = bfrcast(char *, dyn->d_val);
                 break;
 
             case bfdt_symtab:
-                ef->symtab = rcast(struct bfelf_sym *, dyn->d_val);
+                ef->symtab = bfrcast(struct bfelf_sym *, dyn->d_val);
                 break;
 
             case bfdt_rela:
-                ef->relatab_dyn = rcast(struct bfelf_rela *, dyn->d_val);
+                ef->relatab_dyn = bfrcast(struct bfelf_rela *, dyn->d_val);
                 break;
 
             case bfdt_relasz:
@@ -1285,7 +1285,7 @@ private_process_dynamic_section(struct bfelf_file_t *ef)
                 break;
 
             case bfdt_jmprel:
-                ef->relatab_plt = rcast(struct bfelf_rela *, dyn->d_val);
+                ef->relatab_plt = bfrcast(struct bfelf_rela *, dyn->d_val);
                 break;
 
             case bfdt_init_array:
@@ -1341,43 +1341,39 @@ bfelf_file_init(const char *file, uint64_t filesz, struct bfelf_file_t *ef)
     bfelf64_word i = 0;
 
     if (file == nullptr) {
-        return bfinvalid_argument("file == NULL");
+        return bfinvalid_argument("file == nullptr");
     }
 
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (filesz < sizeof(struct bfelf_ehdr)) {
         return bfinvalid_argument("filesz invalid");
     }
 
-    for (i = 0; i < sizeof(struct bfelf_file_t); i++) {
-        rcast(char *, ef)[i] = 0;
-    }
-
     ef->file = file;
     ef->filesz = filesz;
 
-    ef->ehdr = rcast(const struct bfelf_ehdr *, file);
-    ef->phdrtab = rcast(const struct bfelf_phdr *, file + ef->ehdr->e_phoff);
-    ef->shdrtab = rcast(const struct bfelf_shdr *, file + ef->ehdr->e_shoff);
+    ef->ehdr = bfrcast(const struct bfelf_ehdr *, file);
+    ef->phdrtab = bfrcast(const struct bfelf_phdr *, file + ef->ehdr->e_phoff);
+    ef->shdrtab = bfrcast(const struct bfelf_shdr *, file + ef->ehdr->e_shoff);
 
     ret = private_check_signature(ef);
     if (ret != BFELF_SUCCESS) {
-        goto failure;
+        return ret;
     }
 
     ret = private_check_support(ef);
     if (ret != BFELF_SUCCESS) {
-        goto failure;
+        return ret;
     }
 
     private_process_segments(ef);
     private_process_dynamic_section(ef);
 
     ef->entry = ef->ehdr->e_entry;
-    ef->shstrtab = rcast(const char *, file + ef->shdrtab[ef->ehdr->e_shstrndx].sh_offset);
+    ef->shstrtab = bfrcast(const char *, file + ef->shdrtab[ef->ehdr->e_shstrndx].sh_offset);
 
     /*
      * ld from binutils 2.27 only has rela.dyn, while ld.gold and ld.lld both
@@ -1430,17 +1426,9 @@ bfelf_file_init(const char *file, uint64_t filesz, struct bfelf_file_t *ef)
      * ELF file to the loader, in which case we reference the string table
      * relative to the provided exec.
      */
-    ef->strtab = cadd(const char *, ef->strtab_offset, rcast(bfelf64_addr, file));
+    ef->strtab = bfcadd(const char *, ef->strtab_offset, bfrcast(bfelf64_addr, file));
 
     return BFELF_SUCCESS;
-
-failure:
-
-    for (i = 0; i < sizeof(struct bfelf_file_t); i++) {
-        rcast(char *, ef)[i] = 0;
-    }
-
-    return ret;
 }
 
 /**
@@ -1461,10 +1449,10 @@ static inline int64_t
 bfelf_file_get_num_load_instrs(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
-    return scast(int64_t, ef->num_load_instr);
+    return bfscast(int64_t, ef->num_load_instr);
 }
 
 /**
@@ -1488,11 +1476,11 @@ bfelf_file_get_load_instr(const struct bfelf_file_t *ef, uint64_t index,
                           const struct bfelf_load_instr **instr)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (instr == nullptr) {
-        return bfinvalid_argument("phdr == NULL");
+        return bfinvalid_argument("phdr == nullptr");
     }
 
     if (index >= ef->num_load_instr) {
@@ -1525,11 +1513,11 @@ bfelf_file_get_section_info(const struct bfelf_file_t *ef, struct section_info_t
     bfelf64_word i = 0;
 
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (info == nullptr) {
-        return bfinvalid_argument("info == NULL");
+        return bfinvalid_argument("info == nullptr");
     }
 
     if (ef->added == 0) {
@@ -1537,7 +1525,7 @@ bfelf_file_get_section_info(const struct bfelf_file_t *ef, struct section_info_t
     }
 
     for (i = 0; i < sizeof(struct section_info_t); i++) {
-        rcast(char *, info)[i] = 0;
+        bfrcast(char *, info)[i] = 0;
     }
 
     if (ef->init != 0) {
@@ -1583,18 +1571,18 @@ static inline int64_t
 bfelf_file_get_entry(const struct bfelf_file_t *ef, void **addr)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (addr == nullptr) {
-        return bfinvalid_argument("addr == NULL");
+        return bfinvalid_argument("addr == nullptr");
     }
 
     if (ef->added == 0) {
         return bfinvalid_argument("ef must be added to a loader first");
     }
 
-    *addr = rcast(void *, ef->entry + ef->exec_virt);
+    *addr = bfrcast(void *, ef->entry + ef->exec_virt);
     return BFELF_SUCCESS;
 }
 
@@ -1615,11 +1603,11 @@ static inline int64_t
 bfelf_file_get_stack_perm(const struct bfelf_file_t *ef, bfelf64_xword *perm)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (perm == nullptr) {
-        return bfinvalid_argument("perm == NULL");
+        return bfinvalid_argument("perm == nullptr");
     }
 
     *perm = ef->stack_flags;
@@ -1646,22 +1634,22 @@ static inline int64_t
 bfelf_file_get_relro(const struct bfelf_file_t *ef, bfelf64_addr *addr, bfelf64_xword *size)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (addr == nullptr) {
-        return bfinvalid_argument("addr == NULL");
+        return bfinvalid_argument("addr == nullptr");
     }
 
     if (size == nullptr) {
-        return bfinvalid_argument("size == NULL");
+        return bfinvalid_argument("size == nullptr");
     }
 
     if (ef->added == 0) {
         return bfinvalid_argument("ef must be added to a loader first");
     }
 
-    *addr = ef->relaro_vaddr + rcast(bfelf64_addr, ef->exec_virt);
+    *addr = ef->relaro_vaddr + bfrcast(bfelf64_addr, ef->exec_virt);
     *size = ef->relaro_memsz;
     return BFELF_SUCCESS;
 }
@@ -1682,10 +1670,10 @@ static inline int64_t
 bfelf_file_get_num_needed(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
-    return scast(int64_t, ef->num_needed);
+    return bfscast(int64_t, ef->num_needed);
 }
 
 /**
@@ -1708,11 +1696,11 @@ static inline int64_t
 bfelf_file_get_needed(const struct bfelf_file_t *ef, uint64_t index, const char **needed)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (needed == nullptr) {
-        return bfinvalid_argument("needed == NULL");
+        return bfinvalid_argument("needed == nullptr");
     }
 
     if (index >= ef->num_needed) {
@@ -1739,10 +1727,10 @@ static inline int64_t
 bfelf_file_get_total_size(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
-    return scast(int64_t, ef->total_memsz);
+    return bfscast(int64_t, ef->total_memsz);
 }
 
 /**
@@ -1761,7 +1749,7 @@ static inline int64_t
 bfelf_file_get_pic_pie(const struct bfelf_file_t *ef)
 {
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     return ef->start_addr == 0 ? 1 : 0;
@@ -1796,15 +1784,15 @@ bfelf_loader_add(
     bfelf64_addr start;
 
     if (loader == nullptr) {
-        return bfinvalid_argument("loader == NULL");
+        return bfinvalid_argument("loader == nullptr");
     }
 
     if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
+        return bfinvalid_argument("ef == nullptr");
     }
 
     if (exec_addr == nullptr) {
-        return bfinvalid_argument("exec_addr == NULL");
+        return bfinvalid_argument("exec_addr == nullptr");
     }
 
     if (loader->num >= MAX_NUM_MODULES) {
@@ -1821,13 +1809,13 @@ bfelf_loader_add(
         ef->exec_virt = exec_virt;
     }
 
-    start = rcast(bfelf64_addr, ef->exec_addr - ef->start_addr);
+    start = bfrcast(bfelf64_addr, ef->exec_addr - ef->start_addr);
 
-    ef->hash = cadd(const bfelf64_word *, ef->hash, start);
-    ef->strtab = cadd(const char *, ef->strtab_offset, start);
-    ef->symtab = cadd(const struct bfelf_sym *, ef->symtab, start);
-    ef->relatab_dyn = cadd(const struct bfelf_rela *, ef->relatab_dyn, start);
-    ef->relatab_plt = cadd(const struct bfelf_rela *, ef->relatab_plt, start);
+    ef->hash = bfcadd(const bfelf64_word *, ef->hash, start);
+    ef->strtab = bfcadd(const char *, ef->strtab_offset, start);
+    ef->symtab = bfcadd(const struct bfelf_sym *, ef->symtab, start);
+    ef->relatab_dyn = bfcadd(const struct bfelf_rela *, ef->relatab_dyn, start);
+    ef->relatab_plt = bfcadd(const struct bfelf_rela *, ef->relatab_plt, start);
 
     ef->nbucket = ef->hash[0];
     ef->nchain = ef->hash[1];
@@ -1839,7 +1827,7 @@ bfelf_loader_add(
      * table is to assume that the dynamic string table is always after the
      * dynamic symbol table. :(
      */
-    ef->symnum = (rcast(bfelf64_addr, ef->strtab) - rcast(bfelf64_addr, ef->symtab)) /
+    ef->symnum = (bfrcast(bfelf64_addr, ef->strtab) - bfrcast(bfelf64_addr, ef->symtab)) /
                  sizeof(struct bfelf_sym);
 
     loader->efs[loader->num++] = ef;
@@ -1865,7 +1853,7 @@ bfelf_loader_relocate(struct bfelf_loader_t *loader)
     bfelf64_word i = 0;
 
     if (loader == nullptr) {
-        return bfinvalid_argument("loader == NULL");
+        return bfinvalid_argument("loader == nullptr");
     }
 
     if (loader->relocated == 1) {
@@ -1911,15 +1899,15 @@ bfelf_loader_resolve_symbol(const struct bfelf_loader_t *loader, const char *nam
     const struct bfelf_sym *found_sym = nullptr;
 
     if (loader == nullptr) {
-        return bfinvalid_argument("loader == NULL");
+        return bfinvalid_argument("loader == nullptr");
     }
 
     if (name == nullptr) {
-        return bfinvalid_argument("name == NULL");
+        return bfinvalid_argument("name == nullptr");
     }
 
     if (addr == nullptr) {
-        return bfinvalid_argument("addr == NULL");
+        return bfinvalid_argument("addr == nullptr");
     }
 
     ret = private_get_sym_global(loader, name, &found_ef, &found_sym);
@@ -1932,44 +1920,45 @@ bfelf_loader_resolve_symbol(const struct bfelf_loader_t *loader, const char *nam
 }
 
 /* ---------------------------------------------------------------------------------------------- */
-/* Helper Functions                                                                               */
+/* ELF Loading APIs                                                                               */
 /* ---------------------------------------------------------------------------------------------- */
 
+/* @cond */
+
+struct bfelf_binary_t
+{
+    char *exec;
+    const char *file;
+    uint64_t exec_size;
+    uint64_t file_size;
+    struct bfelf_file_t ef;
+};
+
 static inline int64_t
-bfelf_load_elf(
-    const char *file,                   /* In */
-    uint64_t filesz,                    /* In */
-    struct bfelf_file_t *ef,            /* Out */
-    char **exec)                        /* Out */
+private_load_elf_binary(struct bfelf_binary_t *binary)
 {
     int64_t i = 0;
     int64_t ret = 0;
-    int64_t exec_size = 0;
     int64_t num_segments = 0;
 
-    if (file == nullptr) {
-        return bfinvalid_argument("file == NULL");
+    /*
+     * Note:
+     *
+     * This function expects that binary->file and binary->file_size have
+     * already been filled in before executing this function. It will
+     * allocate the exec, and then copy each program segment in the provided
+     * file into the exec
+     */
+
+    if (binary->ef.file == nullptr) {
+        ret = bfelf_file_init(binary->file, binary->file_size, &binary->ef);
+        if (ret != BF_SUCCESS) {
+            return ret;
+        }
     }
 
-    if (filesz == 0) {
-        return bfinvalid_argument("file size == 0");
-    }
-
-    if (ef == nullptr) {
-        return bfinvalid_argument("ef == NULL");
-    }
-
-    if (exec == nullptr) {
-        return bfinvalid_argument("exec == NULL");
-    }
-
-    ret = bfelf_file_init(file, filesz, ef);
-    if (ret != BF_SUCCESS) {
-        return ret;
-    }
-
-    exec_size = bfelf_file_get_total_size(ef);
-    num_segments = bfelf_file_get_num_load_instrs(ef);
+    num_segments = bfelf_file_get_num_load_instrs(&binary->ef);
+    binary->exec_size = bfscast(uint64_t, bfelf_file_get_total_size(&binary->ef));
 
     /*
      * TODO:
@@ -1991,12 +1980,12 @@ bfelf_load_elf(
      * to be changed to support this.
      */
 
-    *exec = scast(char *, platform_alloc_rwe(scast(uint64_t, exec_size)));
-    if (*exec == nullptr) {
+    binary->exec = bfscast(char *, platform_alloc_rwe(binary->exec_size));
+    if (binary->exec == nullptr) {
         return bfout_of_memory("unable to allocate exec RWE memory");
     }
 
-    platform_memset(*exec, 0, scast(uint64_t, exec_size));
+    platform_memset(binary->exec, 0, binary->exec_size);
 
     for (i = 0; i < num_segments; i++) {
         const struct bfelf_load_instr *instr = nullptr;
@@ -2004,14 +1993,220 @@ bfelf_load_elf(
         const char *src = nullptr;
         char *dst = nullptr;
 
-        ret = bfelf_file_get_load_instr(ef, scast(uint64_t, i), &instr);
-        ignored(ret);
+        ret = bfelf_file_get_load_instr(&binary->ef, bfscast(uint64_t, i), &instr);
+        bfignored(ret);
 
-        dst = add(char *, *exec, instr->mem_offset);
-        src = cadd(const char *, file, instr->file_offset);
+        dst = bfadd(char *, binary->exec, instr->mem_offset);
+        src = bfcadd(const char *, binary->file, instr->file_offset);
 
         platform_memcpy(dst, src, instr->filesz);
     }
+
+    return BF_SUCCESS;
+}
+
+static inline int64_t
+private_load_elf_binaries(
+    struct bfelf_binary_t *binaries,
+    uint64_t num_binaries,
+    struct bfelf_loader_t *loader)
+{
+    uint64_t i = 0;
+    int64_t ret = 0;
+
+    for (i = 0; i < num_binaries; i++) {
+        ret = bfelf_loader_add(loader, &binaries[i].ef, binaries[i].exec, binaries[i].exec);
+        if (ret != BFELF_SUCCESS) {
+            return ret;
+        }
+    }
+
+    ret = bfelf_loader_relocate(loader);
+    if (ret != BFELF_SUCCESS) {
+        return ret;
+    }
+
+    return BF_SUCCESS;
+}
+
+static inline int64_t
+private_crt_info(
+    struct bfelf_binary_t *binaries,
+    uint64_t num_binaries,
+    struct crt_info_t *crt_info)
+{
+    uint64_t i = 0;
+
+    for (i = 0; i < num_binaries; i++) {
+
+        int64_t ret = 0;
+        struct section_info_t section_info = {};
+
+        ret = bfelf_file_get_section_info(&binaries[i].ef, &section_info);
+        if (ret != BFELF_SUCCESS) {
+            return ret;
+        }
+
+        crt_info->info[crt_info->info_num++] = section_info;
+    }
+
+    return BF_SUCCESS;
+}
+
+/* @endcond */
+
+/**
+ * Load
+ *
+ * Takes an array of ELF binaries and loads them. The resulting output is an
+ * entry point that can be executed. The CRT info and the ELF loader are also
+ * provided as a result.
+ *
+ * @note This function gets the entry point of the last binary provided.
+ *     For this reason, the main executable should ALWAYS be last in the list
+ *     of ELF binaries provided
+ *
+ * @note It is assumed that file and file_size are already provided for each
+ *     ELF binary. This function will loop through each binary, and use this
+ *     information to actually load everything into ELF file specific
+ *     structures.
+ *
+ * @expects binaries != null
+ * @expects num_binaries != 0 && num_binaries < MAX_NUM_MODULES
+ * @expects entry != null
+ * @expects crt_info != null
+ * @expects loader != null
+ * @ensures none
+ *
+ * @param binaries the list of ELF binaries to load
+ * @param num_binaries the number of binaries provided
+ * @param entry the resulting entry point
+ * @param crt_info the resulting CRT info
+ * @param loader the resulting ELF loader
+ * @return BFELF_SUCCESS on success, negative on error
+ */
+static inline int64_t
+bfelf_load(
+    struct bfelf_binary_t *binaries,
+    uint64_t num_binaries,
+    void **entry,
+    struct crt_info_t *crt_info,
+    struct bfelf_loader_t *loader)
+{
+    uint64_t i = 0;
+    int64_t ret = 0;
+
+    if (binaries == nullptr) {
+        return bfinvalid_argument("binaries == nullptr");
+    }
+
+    if (num_binaries == 0 || num_binaries >= MAX_NUM_MODULES) {
+        return bfinvalid_argument("num_binaries == 0 || num_binaries >= MAX_NUM_MODULES");
+    }
+
+    if (entry == nullptr) {
+        return bfinvalid_argument("entry == nullptr");
+    }
+
+    if (crt_info == nullptr) {
+        return bfinvalid_argument("crt_info == nullptr");
+    }
+
+    if (loader == nullptr) {
+        return bfinvalid_argument("loader == nullptr");
+    }
+
+    for (i = 0; i < num_binaries; i++) {
+        ret = private_load_elf_binary(&binaries[i]);
+        if (ret != BF_SUCCESS) {
+            return ret;
+        }
+    }
+
+    ret = private_load_elf_binaries(binaries, num_binaries, loader);
+    if (ret != BF_SUCCESS) {
+        return ret;
+    }
+
+    ret = private_crt_info(binaries, num_binaries, crt_info);
+    if (ret != BF_SUCCESS) {
+        return ret;
+    }
+
+    ret = bfelf_file_get_entry(&binaries[num_binaries - 1].ef, entry);
+    bfignored(ret);
+
+    return BF_SUCCESS;
+}
+
+/**
+ * Set Args
+ *
+ * Tells the CRT info to use the standard main(arc, argv) function, and sets
+ * the values of these. This information will be passed to the resulting
+ * entry point
+ *
+ * @expects crt_info != nullptr
+ * @ensures returns BFELF_SUCCESS if params == valid
+ *
+ * @param crt_info the CRT info to fill where the args will be stored
+ * @param argc the total number of args
+ * @param argv the args
+ * @return BFELF_SUCCESS on success, negative on error
+ */
+static inline int64_t
+bfelf_set_args(
+    struct crt_info_t *crt_info,
+    int argc,
+    const char **argv)
+{
+    if (crt_info == nullptr) {
+        return bfinvalid_argument("crt_info == nullptr");
+    }
+
+    crt_info->argc = argc;
+    crt_info->argv = argv;
+    crt_info->arg_type = 0;
+
+    return BF_SUCCESS;
+}
+
+/**
+ * Set Integer Args
+ *
+ * There are two different types of main functions supported: the standard
+ * main(arc, argv) and then another form that uses 64bit integers in the
+ * form int64_t bfmain(int64_t, int64_t, int64_t, int64_t). This function tells
+ * the CRT info to use the integer version, and sets the values of these.
+ * This information will be passed to the resulting entry point
+ *
+ * @expects crt_info != nullptr
+ * @ensures returns BFELF_SUCCESS if params == valid
+ *
+ * @param crt_info the CRT info to fill where the args will be stored
+ * @param request the request id
+ * @param arg1 integer arg #1
+ * @param arg2 integer arg #2
+ * @param arg3 integer arg #3
+ * @return BFELF_SUCCESS on success, negative on error
+ */
+static inline int64_t
+bfelf_set_integer_args(
+    struct crt_info_t *crt_info,
+    uintptr_t request,
+    uintptr_t arg1,
+    uintptr_t arg2,
+    uintptr_t arg3)
+{
+    if (crt_info == nullptr) {
+        return bfinvalid_argument("crt_info == nullptr");
+    }
+
+    crt_info->request = request;
+    crt_info->arg1 = arg1;
+    crt_info->arg2 = arg2;
+    crt_info->arg3 = arg3;
+    crt_info->arg_type = 1;
 
     return BF_SUCCESS;
 }
@@ -2031,208 +2226,191 @@ bfelf_load_elf(
 #include <memory>
 #include <exception>
 
-/**
- * Get Needed Library List
- *
- * Returns the name of a shared library that is needed by this
- * ELF file
- *
- * @expects ef != nullptr
- * @ensures none
- *
- * @param ef the ELF file to get the list of needed files from
- * @return list of needed files
- */
-inline std::vector<std::string>
-bfelf_file_get_needed_list(gsl::not_null<const bfelf_file_t *> ef)
+inline bfn::buffer
+private_read_binary(
+    gsl::not_null<file *> f,
+    const std::string &filename,
+    bfelf_binary_t &binary)
 {
-    auto &&ret = 0LL;
-    auto &&needed_files = std::vector<std::string> {};
+    auto buffer = f->read_binary(filename);
 
-    for (auto i = 0LL; i < bfelf_file_get_num_needed(ef); i++) {
+    binary.file = buffer.get();
+    binary.file_size = buffer.size();
+
+    return buffer;
+}
+
+inline std::vector<std::string>
+private_get_needed_list(const bfelf_file_t &ef)
+{
+    int64_t ret = 0;
+    std::vector<std::string> list;
+
+    for (auto i = 0LL; i < bfelf_file_get_num_needed(&ef); i++) {
         const char *needed = nullptr;
 
-        ret = bfelf_file_get_needed(ef, static_cast<uint64_t>(i), &needed);
+        ret = bfelf_file_get_needed(&ef, static_cast<uint64_t>(i), &needed);
         if (ret != BFELF_SUCCESS) {
             throw std::runtime_error("bfelf_file_get_needed failed: " + bfn::to_string(ret, 16));
         }
 
-        needed_files.emplace_back(needed);
+        list.emplace_back(needed);
     }
 
-    return std::move(needed_files);
+    return list;
+}
+
+inline std::vector<std::string>
+bfelf_read_binary_and_get_needed_list(
+    gsl::not_null<file *> f,
+    const std::string &filename,
+    const std::vector<std::string> &paths,
+    bfn::buffer &buffer,
+    bfelf_binary_t &binary)
+{
+    buffer = private_read_binary(f, filename, binary);
+
+    auto ret = bfelf_file_init(buffer.data(), buffer.size(), &binary.ef);
+    if (ret != BFELF_SUCCESS) {
+        throw std::runtime_error("bfelf_file_init failed: " + std::to_string(ret));
+    }
+
+    auto list = f->find_files(private_get_needed_list(binary.ef), paths);
+    return list;
 }
 
 /**
- * ELF Binary
+ * Binaries Info
  *
- * Encapsulates all the structures that are used for loading an ELF binary.
- * Given a filename, this class will construct the ELF binary, and provide
- * any of the resources that were created.
+ * Provides a C++ wrapper for all of the ELF structures that are needed to
+ * load an ELF binary.
+ *
  */
-class bfelf_binary
+class binaries_info
 {
 public:
 
-    using filename_type = std::string;                              ///< File name type
-    using filesize_type = std::size_t;                              ///< File size type
-    using filedata_type = std::vector<char>;                        ///< File data type
-    using execdata_type = std::unique_ptr<char, decltype(free) *>;  ///< File data type
+    using index_type = std::size_t;
+    using info_type = crt_info_t;
+    using entry_type = void *;
+    using loader_type = bfelf_loader_t;
 
-    /**
-     * Library Constructor
-     *
-     * @expects f != nullptr
-     * @ensures none
-     *
-     * @param f the file object to use for file operations
-     * @param filename the filename of the ELF binary to load
-     */
-    bfelf_binary(gsl::not_null<file *> f, const std::string &filename) :
-        m_filename{filename},
-        m_execdata{nullptr, free}
+    binaries_info(
+        gsl::not_null<file *> f,
+        const std::string &filename,
+        const std::vector<std::string> &paths)
     {
-        char *exec;
-        int64_t ret = 0;
+        bfn::buffer data;
+        bfelf_binary_t binary = {};
 
-        m_filedata = f->read_binary(filename);
-        m_filesize = m_filedata.size();
+        auto filenames = bfelf_read_binary_and_get_needed_list(f, filename, paths, data, binary);
 
-        ret = bfelf_load_elf(m_filedata.data(), m_filesize, &m_ef, &exec);
-        if (ret != BF_SUCCESS) {
-            throw std::runtime_error("failed to load ELF binary: " + filename + ": " + bfn::to_string(ret, 16));
-        }
+        this->init_binaries(f, filenames);
+        this->push_binary(std::move(data), std::move(binary));
 
-        m_execdata = execdata_type{exec, free};
+        auto ___ = gsl::on_failure([&]{
+            this->unload_binaries();
+        });
+
+        this->load_binaries();
     }
 
-    /**
-     * Default Destructor
-     *
-     * @expects none
-     * @ensures none
-     */
-    ~bfelf_binary() = default;
+    binaries_info(
+        gsl::not_null<file *> f,
+        const std::vector<std::string> &filenames)
+    {
+        this->init_binaries(f, filenames);
 
-    /**
-     * File Name
-     *
-     * @expects none
-     * @ensures none
-     *
-     * @return returns the file name for this ELF binary
-     */
-    const filename_type &filename() const
-    { return m_filename; }
+        auto ___ = gsl::on_failure([&]{
+            this->unload_binaries();
+        });
 
-    /**
-     * File Size
-     *
-     * @expects none
-     * @ensures none
-     *
-     * @return returns the file size for this ELF binary
-     */
-    filesize_type filesize() const
-    { return m_filesize; }
+        this->load_binaries();
+    }
 
-    /**
-     * File Data
-     *
-     * @expects none
-     * @ensures none
-     *
-     * @return returns a filedata_type containing the contents of the ELF file
-     */
-    const filedata_type &filedata() const
-    { return m_filedata; }
+    ~binaries_info()
+    {
+        this->unload_binaries();
+    }
 
-    /**
-     * Exec Data
-     *
-     * @expects none
-     * @ensures none
-     *
-     * @return returns an execdata_type containing the contents of the ELF
-     *     file's exec (the executable version of the ELF file)
-     */
-    const execdata_type &execdata() const
-    { return m_execdata; }
+    void
+    set_args(int argc, const char **argv)
+    {
+        auto ret = bfelf_set_args(&m_info, argc, argv);
+        bfignored(ret);
+    }
 
-    /**
-     * ELF File
-     *
-     * @expects none
-     * @ensures none
-     *
-     * @return returns the bfelf_file_t ELF file for this binary
-     */
-    struct bfelf_file_t &ef()
-    { return m_ef; }
+    bfelf_file_t &
+    ef()
+    { return m_binaries.back().ef; }
+
+    bfelf_file_t &
+    ef(index_type index)
+    { return m_binaries.at(index).ef; }
+
+    const info_type &
+    info() const
+    { return m_info; }
+
+    entry_type
+    entry() const
+    { return m_entry; }
+
+    loader_type &
+    loader()
+    { return m_loader; }
 
 private:
 
-    filename_type m_filename;
-    filesize_type m_filesize;
-
-    filedata_type m_filedata;
-    execdata_type m_execdata;
-
-    struct bfelf_file_t m_ef {};
-
-public:
-
-    bfelf_binary(bfelf_binary &&) = default;                        ///< Default move construction
-    bfelf_binary &operator=(bfelf_binary &&) = default;             ///< Default move operator
-
-    bfelf_binary(const bfelf_binary &) = delete;                    ///< Deleted copy construction
-    bfelf_binary &operator=(const bfelf_binary &) = delete;         ///< Deleted copy operator
-};
-
-/**
- * List of Binary ELF files
- */
-using binary_list = std::vector<std::unique_ptr<bfelf_binary>>;
-
-/**
- * Load ELF Binaries
- *
- * Given a list of filenames to load, this function loads each ELF binary,
- * adds it to the provided ELF loader, and then returns a list containing
- * all of the ELF binaries that were loaded on success. If any binary fails
- * to load, this function throws.
- *
- * @expects f != nullptr
- * @expects loader != nullptr
- * @ensures none
- *
- * @param f the file object to use for file operations
- * @param filenames list of ELF files to loader
- * @param loader the ELF loader to add each ELF binary to
- * @return returns list of ELF binaries that were loaded
- */
-inline binary_list
-bfelf_load_binaries(
-    gsl::not_null<file *> f,
-    const std::vector<std::string> &filenames,
-    gsl::not_null<bfelf_loader_t *> loader)
-{
-    auto &&ret = 0LL;
-    auto &&binaries = binary_list{};
-
-    for (const auto &filename : filenames) {
-        auto &&binary = std::make_unique<bfelf_binary>(f, filename);
-
-        ret = bfelf_loader_add(loader, &binary->ef(), binary->execdata().get(), binary->execdata().get());
-        if (ret != BFELF_SUCCESS) {
-            throw std::runtime_error("failed to add EFL binary to loader: " + binary->filename() + " :" + bfn::to_string(ret, 16));
-        }
-
-        binaries.push_back(std::move(binary));
+    void
+    push_binary(
+        bfn::buffer &&data,
+        bfelf_binary_t &&binary)
+    {
+        m_datas.push_back(std::move(data));
+        m_binaries.push_back(std::move(binary));
     }
 
-    return std::move(binaries);
-}
+    void
+    init_binaries(
+        gsl::not_null<file *> f,
+        const std::vector<std::string> &filenames)
+    {
+        expects(!filenames.empty());
+
+        for (const auto &filename : filenames) {
+
+            bfelf_binary_t binary = {};
+            auto data = private_read_binary(f, filename, binary);
+
+            this->push_binary(std::move(data), std::move(binary));
+        }
+    }
+
+    void
+    load_binaries()
+    {
+        auto ret = bfelf_load(m_binaries.data(), m_binaries.size(), &m_entry, &m_info, &m_loader);
+        if (ret != BF_SUCCESS) {
+            throw std::runtime_error("bfelf_load failed: " + bfn::to_string(ret, 16));
+        }
+    }
+
+    void
+    unload_binaries()
+    {
+        for (const auto &binary : m_binaries) {
+            platform_free_rwe(binary.exec, binary.exec_size);
+        }
+    }
+
+    info_type m_info{};
+    entry_type m_entry{};
+    loader_type m_loader{};
+
+    std::vector<bfelf_binary_t> m_binaries;
+    std::vector<file::binary_data> m_datas;
+};
 
 #endif
 

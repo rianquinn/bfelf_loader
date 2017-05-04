@@ -53,7 +53,7 @@ TEST_CASE("bfelf_loader_resolve_symbol: invalid addr")
 
 TEST_CASE("bfelf_loader_resolve_symbol: no files added")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_loader_t loader = {};
 
     ret = bfelf_loader_relocate(&loader);
@@ -67,78 +67,50 @@ TEST_CASE("bfelf_loader_resolve_symbol: no files added")
 
 TEST_CASE("bfelf_loader_resolve_symbol: no such symbol")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
-
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    ignored(binaries);
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
+    int64_t ret = 0;
+    binaries_info binaries{&g_file, g_filenames};
 
     func_t func;
 
-    ret = bfelf_loader_resolve_symbol(&loader, "invalid_sym", reinterpret_cast<void **>(&func));
+    ret = bfelf_loader_resolve_symbol(&binaries.loader(), "invalid_sym", reinterpret_cast<void **>(&func));
     CHECK(ret == BFELF_ERROR_NO_SUCH_SYMBOL);
 }
 
 TEST_CASE("bfelf_loader_resolve_symbol: success")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
-
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    ignored(binaries);
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
+    int64_t ret = 0;
+    binaries_info binaries{&g_file, g_filenames};
 
     func_t func;
 
-    ret = bfelf_loader_resolve_symbol(&loader, "abort", reinterpret_cast<void **>(&func));
+    ret = bfelf_loader_resolve_symbol(&binaries.loader(), "abort", reinterpret_cast<void **>(&func));
     CHECK(ret == BFELF_SUCCESS);
 }
 
 TEST_CASE("bfelf_loader_resolve_symbol: no such symbol no hash")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
+    int64_t ret = 0;
+    binaries_info binaries{&g_file, g_filenames};
 
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-
-    auto &&lib1_details = binaries.at(0);
-    auto &&lib2_details = binaries.at(1);
-
-    lib1_details->ef().hash = nullptr;
-    lib2_details->ef().hash = nullptr;
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
+    binaries.ef(0).hash = nullptr;
+    binaries.ef(1).hash = nullptr;
 
     func_t func;
 
-    ret = bfelf_loader_resolve_symbol(&loader, "invalid_sym", reinterpret_cast<void **>(&func));
+    ret = bfelf_loader_resolve_symbol(&binaries.loader(), "invalid_sym", reinterpret_cast<void **>(&func));
     CHECK(ret == BFELF_ERROR_NO_SUCH_SYMBOL);
 }
 
 TEST_CASE("bfelf_loader_resolve_symbol: success no hash")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
+    int64_t ret = 0;
+    binaries_info binaries{&g_file, g_filenames};
 
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-
-    auto &&lib1_details = binaries.at(0);
-    auto &&lib2_details = binaries.at(1);
-
-    lib1_details->ef().hash = nullptr;
-    lib2_details->ef().hash = nullptr;
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
+    binaries.ef(0).hash = nullptr;
+    binaries.ef(1).hash = nullptr;
 
     func_t func;
 
-    ret = bfelf_loader_resolve_symbol(&loader, "abort", reinterpret_cast<void **>(&func));
+    ret = bfelf_loader_resolve_symbol(&binaries.loader(), "abort", reinterpret_cast<void **>(&func));
     CHECK(ret == BFELF_SUCCESS);
 }

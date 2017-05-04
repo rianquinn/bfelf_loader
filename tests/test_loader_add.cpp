@@ -29,10 +29,9 @@ char dummy[10];
 
 TEST_CASE("bfelf_loader_add: invalid loader")
 {
-    auto ret = 0LL;
     bfelf_file_t dummy_misc_ef = {};
 
-    ret = bfelf_loader_add(nullptr, &dummy_misc_ef, dummy, dummy);
+    auto ret = bfelf_loader_add(nullptr, &dummy_misc_ef, dummy, dummy);
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
@@ -46,43 +45,52 @@ TEST_CASE("bfelf_loader_add: invalid elf file")
 
 TEST_CASE("bfelf_loader_add: invalid addr")
 {
-    auto ret = 0LL;
     bfelf_loader_t loader = {};
     bfelf_file_t dummy_misc_ef = {};
 
-    ret = bfelf_loader_add(&loader, &dummy_misc_ef, nullptr, dummy);
+    auto ret = bfelf_loader_add(&loader, &dummy_misc_ef, nullptr, dummy);
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
 // TEST_CASE("bfelf_loader_add: too many files")
 // {
-//     auto ret = 0LL;
+//     int64_t ret = 0;
+//     bfelf_file_t ef = {};
 //     bfelf_loader_t loader = {};
 
+//     auto data = get_fake_elf();
+//     auto &buf = std::get<0>(data);
+//     auto size = std::get<1>(data);
+
 //     for (auto i = 0; i < MAX_NUM_MODULES + 1; i++) {
+
 //         bfelf_file_t dummy_misc_ef = {};
-//         auto &&exec = add_elf_to_loader("/lib/libdummy_lib1.so", &dummy_misc_ef, &loader);
+
+//         ret = bfelf_file_init(buf.get(), size, &ef);
+//         REQUIRE(ret == BFELF_SUCCESS);
+
+//         ret = bfelf_loader_add(&loader, &ef, dummy, dummy);
 
 //         if (i < MAX_NUM_MODULES) {
-//             CHECK(exec);
+//             CHECK(ret == BF_SUCCESS);
 //         }
 //         else {
-//             CHECK(!exec);
+//             CHECK(ret == BFELF_ERROR_LOADER_FULL);
 //         }
 //     }
 // }
 
 TEST_CASE("bfelf_loader_add: add fake")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_file_t ef = {};
     bfelf_loader_t loader = {};
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_loader_add(&loader, &ef, dummy, dummy);

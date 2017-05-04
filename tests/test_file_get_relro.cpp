@@ -35,45 +35,38 @@ TEST_CASE("bfelf_file_get_relro: invalid elf file")
 
 TEST_CASE("bfelf_file_get_relro: invalid addr")
 {
-    auto ret = 0LL;
     bfelf_file_t ef = {};
     bfelf64_xword size = 0;
 
-    ret = bfelf_file_get_relro(&ef, nullptr, &size);
+    auto ret = bfelf_file_get_relro(&ef, nullptr, &size);
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
 TEST_CASE("bfelf_file_get_relro: invalid size")
 {
-    auto ret = 0LL;
     bfelf_file_t ef = {};
     bfelf64_addr addr = 0;
 
-    ret = bfelf_file_get_relro(&ef, &addr, nullptr);
+    auto ret = bfelf_file_get_relro(&ef, &addr, nullptr);
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
 TEST_CASE("bfelf_file_get_relro: not added to loader")
 {
-    auto ret = 0LL;
     bfelf_file_t ef = {};
     bfelf64_addr addr = 0;
     bfelf64_xword size = 0;
 
-    ret = bfelf_file_get_relro(&ef, &addr, &size);
+    auto ret = bfelf_file_get_relro(&ef, &addr, &size);
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
 TEST_CASE("bfelf_file_get_relro: success")
 {
-    auto ret = 0LL;
     bfelf64_addr addr = 0;
     bfelf64_xword size = 0;
-    bfelf_loader_t loader = {};
+    binaries_info binaries{&g_file, g_filenames};
 
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    auto &&lib1_binary = binaries.at(0);
-
-    ret = bfelf_file_get_relro(&lib1_binary->ef(), &addr, &size);
+    auto ret = bfelf_file_get_relro(&binaries.ef(), &addr, &size);
     CHECK(ret == BFELF_SUCCESS);
 }

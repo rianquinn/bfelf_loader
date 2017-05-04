@@ -20,43 +20,28 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 #include <catch/catch.hpp>
-
-#include <fstream>
 #include <test_real_elf.h>
 
 std::vector<char>fake_stack(0x8000);
-using func_t = int (*)(char *stack, crt_info_t *);
 
-TEST_CASE("bfelf_loader_resolve_symbol: real test")
+TEST_CASE("bfelf_loader_resolve_symbol: real test (list)")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
+    binaries_info binaries{&g_file, g_filenames};
 
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
-
-    crt_info_t crt_info = {};
     std::array<const char *, 2> argv{{"1000", "2000"}};
+    binaries.set_args(gsl::narrow_cast<int>(argv.size()), argv.data());
 
-    crt_info.argc = 2;
-    crt_info.argv = argv.data();
+    _start_t func = reinterpret_cast<_start_t>(binaries.entry());
+    CHECK(func(&fake_stack.at(0x7999), &binaries.info()) == 6000);
+}
 
-    for (auto &binary : binaries) {
-        section_info_t section_info = {};
+TEST_CASE("bfelf_loader_resolve_symbol: real test (needed)")
+{
+    binaries_info binaries{&g_file, g_filenames.back(), {BAREFLANK_SYSROOT_PATH + "/lib/"_s}};
 
-        ret = bfelf_file_get_section_info(&binary->ef(), &section_info);
-        CHECK(ret == BFELF_SUCCESS);
+    std::array<const char *, 2> argv{{"1000", "2000"}};
+    binaries.set_args(gsl::narrow_cast<int>(argv.size()), argv.data());
 
-        crt_info.info[crt_info.info_num++] = section_info;
-    }
-
-    func_t func = nullptr;
-    auto &&dummy_main = binaries.back();
-
-    ret = bfelf_file_get_entry(&dummy_main->ef(), reinterpret_cast<void **>(&func));
-    CHECK(ret == BFELF_SUCCESS);
-
-    CHECK(func(&fake_stack.at(0x7999), &crt_info) == 6000);
+    _start_t func = reinterpret_cast<_start_t>(binaries.entry());
+    CHECK(func(&fake_stack.at(0x7999), &binaries.info()) == 6000);
 }
