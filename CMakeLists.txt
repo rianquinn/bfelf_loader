@@ -1,6 +1,6 @@
 # cmake ..
 
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.6)
 project(bfelf_loader C CXX)
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -17,7 +17,9 @@ include("${CMAKE_INSTALL_PREFIX}/cmake/CMakeGlobal_Project.txt")
 # Subdirectories
 # ------------------------------------------------------------------------------
 
-add_subdirectory(tests)
+if(ENABLE_UNITTESTING)
+    add_subdirectory(tests)
+endif()
 
 # ------------------------------------------------------------------------------
 # Install
