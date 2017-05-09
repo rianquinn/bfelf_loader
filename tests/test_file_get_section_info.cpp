@@ -51,22 +51,15 @@ TEST_CASE("bfelf_file_get_section_info: not added to loader")
 
 TEST_CASE("bfelf_file_get_section_info: expected misc resources")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
-
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    auto &&main_binary = binaries.back();
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
+    binaries_info binaries{&g_file, g_filenames};
 
     section_info_t info = {};
-    auto &&dummy_main_ef = main_binary->ef();
+    auto &dummy_main_ef = binaries.ef();
 
     dummy_main_ef.init = 10;
     dummy_main_ef.fini = 10;
 
-    ret = bfelf_file_get_section_info(&dummy_main_ef, &info);
+    auto ret = bfelf_file_get_section_info(&dummy_main_ef, &info);
     CHECK(ret == BFELF_SUCCESS);
 
     CHECK(info.init_array_addr != nullptr);

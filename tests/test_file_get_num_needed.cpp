@@ -30,9 +30,8 @@ TEST_CASE("bfelf_file_get_num_needed: invalid elf file")
 
 TEST_CASE("bfelf_file_get_num_needed: success")
 {
-    auto ret = 0LL;
     bfelf_file_t ef = {};
 
-    ret = bfelf_file_get_num_needed(&ef);
+    auto ret = bfelf_file_get_num_needed(&ef);
     CHECK(ret == 0);
 }

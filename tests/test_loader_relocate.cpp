@@ -33,7 +33,6 @@ TEST_CASE("bfelf_loader_relocate: invalid loader")
 TEST_CASE("bfelf_loader_relocate: no files added")
 {
     bfelf_loader_t loader = {};
-    memset(&loader, 0, sizeof(loader));
 
     auto ret = bfelf_loader_relocate(&loader);
     CHECK(ret == BFELF_SUCCESS);
@@ -41,43 +40,24 @@ TEST_CASE("bfelf_loader_relocate: no files added")
 
 TEST_CASE("bfelf_loader_relocate: success")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
-
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    ignored(binaries);
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
+    int64_t ret = 0;
+    binaries_info binaries{&g_file, g_filenames};
 }
 
 TEST_CASE("bfelf_loader_relocate: twice")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
+    int64_t ret = 0;
+    binaries_info binaries{&g_file, g_filenames};
 
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    ignored(binaries);
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
-
-    ret = bfelf_loader_relocate(&loader);
+    ret = bfelf_loader_relocate(&binaries.loader());
     CHECK(ret == BFELF_SUCCESS);
 }
 
 TEST_CASE("bfelf_loader_relocate: no such symbol")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
-
     auto filenames = g_filenames;
     filenames.erase(filenames.begin());
     filenames.erase(filenames.begin());
 
-    auto &&binaries = bfelf_load_binaries(&g_file, filenames, &loader);
-    ignored(binaries);
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_ERROR_NO_SUCH_SYMBOL);
+    CHECK_THROWS(binaries_info(&g_file, filenames));
 }

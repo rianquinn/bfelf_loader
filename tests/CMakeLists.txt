@@ -23,7 +23,6 @@ macro(do_test str)
     add_test(bfelf_${str} test_${str})
 endmacro(do_test)
 
-do_test(binary)
 do_test(file_get_entry)
 do_test(file_get_load_instr)
 do_test(file_get_needed)

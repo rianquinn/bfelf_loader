@@ -27,7 +27,7 @@
 
 TEST_CASE("private_hash: strange characters")
 {
-    auto &&str = "strange char here: \200";
+    auto str = "strange char here: \200";
     CHECK(private_hash(static_cast<const char *>(str)) != 0);
 }
 
@@ -58,14 +58,13 @@ TEST_CASE("private_relocate_symbol: invalid relocation")
 
 TEST_CASE("private_process_dynamic_section: test all")
 {
-    auto ret = 0LL;
     bfelf_file_t ef = {};
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    auto ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     private_process_dynamic_section(&ef);

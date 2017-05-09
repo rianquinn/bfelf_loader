@@ -35,14 +35,14 @@ TEST_CASE("bfelf_file_get_entry: invalid elf file")
 
 TEST_CASE("bfelf_file_get_entry: invalid addr")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     bfelf_file_t ef = {};
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_entry(&ef, nullptr);
@@ -51,15 +51,15 @@ TEST_CASE("bfelf_file_get_entry: invalid addr")
 
 TEST_CASE("bfelf_file_get_entry: not added to loader")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     void *addr = nullptr;
     bfelf_file_t ef = {};
 
-    auto &&data = get_fake_elf();
-    auto &&buff = std::get<0>(data);
-    auto &&size = std::get<1>(data);
+    auto data = get_fake_elf();
+    auto &buf = std::get<0>(data);
+    auto size = std::get<1>(data);
 
-    ret = bfelf_file_init(buff.get(), size, &ef);
+    ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
     ret = bfelf_file_get_entry(&ef, &addr);
@@ -68,13 +68,11 @@ TEST_CASE("bfelf_file_get_entry: not added to loader")
 
 TEST_CASE("bfelf_file_get_entry: success")
 {
-    auto ret = 0LL;
+    int64_t ret = 0;
     void *addr = nullptr;
-    bfelf_loader_t loader = {};
 
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    auto &&lib1_binary = binaries.at(0);
+    binaries_info binaries{&g_file, g_filenames};
 
-    ret = bfelf_file_get_entry(&lib1_binary->ef(), &addr);
+    ret = bfelf_file_get_entry(&binaries.ef(), &addr);
     CHECK(ret == BFELF_SUCCESS);
 }

@@ -26,20 +26,18 @@
 
 TEST_CASE("bfelf_file_get_needed: invalid elf file")
 {
-    const char *needed;
     uint64_t index = 0;
+    const char *needed = nullptr;
 
     auto ret = bfelf_file_get_needed(nullptr, index, &needed);
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
-
-    std::cout << BAREFLANK_SYSROOT_PATH << '\n';
 }
 
 TEST_CASE("bfelf_file_get_needed: index")
 {
-    const char *needed;
     uint64_t index = 0;
     bfelf_file_t ef = {};
+    const char *needed = nullptr;
 
     auto ret = bfelf_file_get_needed(&ef, index, &needed);
     CHECK(ret == BFELF_ERROR_INVALID_INDEX);
@@ -56,18 +54,10 @@ TEST_CASE("bfelf_file_get_needed: invalid size")
 
 TEST_CASE("bfelf_file_get_needed: success")
 {
-    auto ret = 0LL;
-    bfelf_loader_t loader = {};
-
-    auto &&binaries = bfelf_load_binaries(&g_file, g_filenames, &loader);
-    auto &&main_binary = binaries.back();
-
-    ret = bfelf_loader_relocate(&loader);
-    CHECK(ret == BFELF_SUCCESS);
-
-    const char *needed;
     uint64_t index = 0;
+    const char *needed = nullptr;
+    binaries_info binaries{&g_file, g_filenames};
 
-    ret = bfelf_file_get_needed(&main_binary->ef(), index, &needed);
+    auto ret = bfelf_file_get_needed(&binaries.ef(), index, &needed);
     CHECK(ret == BFELF_SUCCESS);
 }
