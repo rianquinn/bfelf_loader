@@ -34,7 +34,7 @@ std::vector<std::string> g_filenames = {
     BAREFLANK_SYSROOT_PATH + "/lib/libc++.so.1.0"_s,
     BAREFLANK_SYSROOT_PATH + "/lib/libc++abi.so"_s,
     BAREFLANK_SYSROOT_PATH + "/lib/libpthread.so"_s,
-    BAREFLANK_SYSROOT_PATH + "/lib/libsyscall.so"_s,
+    BAREFLANK_SYSROOT_PATH + "/lib/libbfsyscall.so"_s,
     BAREFLANK_SYSROOT_PATH + "/lib/libbfunwind.so"_s,
     BAREFLANK_SYSROOT_PATH + "/bin/dummy_main"_s
 };
