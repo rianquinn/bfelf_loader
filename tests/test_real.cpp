@@ -31,7 +31,7 @@ TEST_CASE("bfelf_loader_resolve_symbol: real test (list)")
     std::array<const char *, 2> argv{{"1000", "2000"}};
     binaries.set_args(gsl::narrow_cast<int>(argv.size()), argv.data());
 
-    _start_t func = reinterpret_cast<_start_t>(binaries.entry());
+    auto func = reinterpret_cast<_start_t>(binaries.entry());
     CHECK(func(&fake_stack.at(0x7999), &binaries.info()) == 6000);
 }
 
@@ -42,6 +42,6 @@ TEST_CASE("bfelf_loader_resolve_symbol: real test (needed)")
     std::array<const char *, 2> argv{{"1000", "2000"}};
     binaries.set_args(gsl::narrow_cast<int>(argv.size()), argv.data());
 
-    _start_t func = reinterpret_cast<_start_t>(binaries.entry());
+    auto func = reinterpret_cast<_start_t>(binaries.entry());
     CHECK(func(&fake_stack.at(0x7999), &binaries.info()) == 6000);
 }

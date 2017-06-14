@@ -2226,7 +2226,9 @@ bfelf_set_integer_args(
 #include <memory>
 #include <exception>
 
-inline bfn::buffer
+/* @cond */
+
+inline auto
 private_read_binary(
     gsl::not_null<file *> f,
     const std::string &filename,
@@ -2240,7 +2242,7 @@ private_read_binary(
     return buffer;
 }
 
-inline std::vector<std::string>
+inline auto
 private_get_needed_list(const bfelf_file_t &ef)
 {
     int64_t ret = 0;
@@ -2260,7 +2262,28 @@ private_get_needed_list(const bfelf_file_t &ef)
     return list;
 }
 
-inline std::vector<std::string>
+/* @endcond */
+
+/**
+ * Read Binary and Get Needed List
+ *
+ * This function takes a filename, and a list of paths to locate the
+ * provide file. If the ELF binary is located, the function then parses
+ * the ELF file and returns the list of binaries that are needed (i.e.
+ * have to be linked to this ELF binary to resolve needed symbols). If
+ * the binary cannot be located, an exception is thrown.
+ *
+ * @expects none
+ * @ensures none
+ *
+ * @param f the file object to read the located filename
+ * @param filename the name of the ELF binary to get the needed list from
+ * @param paths a list of paths to locate the ELF binary from
+ * @param buffer the buffer to read the ELF binary into
+ * @param binary the binary object
+ * @return list of needed binaries or throws
+ */
+inline auto
 bfelf_read_binary_and_get_needed_list(
     gsl::not_null<file *> f,
     const std::string &filename,
@@ -2284,17 +2307,29 @@ bfelf_read_binary_and_get_needed_list(
  *
  * Provides a C++ wrapper for all of the ELF structures that are needed to
  * load an ELF binary.
- *
  */
 class binaries_info
 {
 public:
 
-    using index_type = std::size_t;
-    using info_type = crt_info_t;
-    using entry_type = void *;
-    using loader_type = bfelf_loader_t;
+    using index_type = std::size_t;             ///< Index type
+    using info_type = crt_info_t;               ///< CRT info type
+    using entry_type = void *;                  ///< Entry point address type
+    using loader_type = bfelf_loader_t;         ///< ELF loader type
 
+    /**
+     * Constructor
+     *
+     * Loads the file provided, and searches the needed list to identify
+     * any other files that are needed for symbol resolution.
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @param f the file object to read the located filename
+     * @param filename the name of the ELF binary to load
+     * @param paths a list of paths to locate the ELF binary from
+     */
     binaries_info(
         gsl::not_null<file *> f,
         const std::string &filename,
@@ -2315,6 +2350,18 @@ public:
         this->load_binaries();
     }
 
+    /**
+     * Constructor
+     *
+     * Loads all of the files provided. This does not search the needed list
+     * and instead expects that the list of binaries provided is complete.
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @param f the file object to read the located filename
+     * @param filenames the list of files to load
+     */
     binaries_info(
         gsl::not_null<file *> f,
         const std::vector<std::string> &filenames)
@@ -2328,11 +2375,23 @@ public:
         this->load_binaries();
     }
 
+    /**
+     * Default Destructor
+     */
     ~binaries_info()
-    {
-        this->unload_binaries();
-    }
+    { this->unload_binaries(); }
 
+    /**
+     * Set Args
+     *
+     * Sets the argc and argv for this binary.
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @param argc the number of arguments to pass to this binary
+     * @param argv the arguments to pass to this binary
+     */
     void
     set_args(int argc, const char **argv)
     {
@@ -2340,23 +2399,69 @@ public:
         bfignored(ret);
     }
 
-    bfelf_file_t &
+    /**
+     * Get Main ELF Binary
+     *
+     * Returns the main ELF binary (i.e. does not return the shared libraries
+     * needed by the main binary)
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return main binary
+     */
+    auto &
     ef()
     { return m_binaries.back().ef; }
 
-    bfelf_file_t &
+    /**
+     * Get Specific ELF Binary
+     *
+     * Returns a specific ELF binary given an index
+     *
+     * @expects index is valid
+     * @ensures none
+     *
+     * @param index the ELF binary to get
+     * @return main binary
+     */
+    auto &
     ef(index_type index)
     { return m_binaries.at(index).ef; }
 
-    const info_type &
+    /**
+     * Get CRT Info
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns CRT info
+     */
+    const auto &
     info() const
     { return m_info; }
 
-    entry_type
+    /**
+     * Get Entry Point Address
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns entry point address
+     */
+    auto
     entry() const
     { return m_entry; }
 
-    loader_type &
+    /**
+     * Get ELF Loader
+     *
+     * @expects none
+     * @ensures none
+     *
+     * @return returns the ELF loader
+     */
+    auto &
     loader()
     { return m_loader; }
 

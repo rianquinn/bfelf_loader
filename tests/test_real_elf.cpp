@@ -21,6 +21,10 @@
 
 #include <test_real_elf.h>
 
+#include <map>
+#include <list>
+#include <vector>
+
 #ifdef WIN32
 #include <windows.h>
 #else
@@ -40,11 +44,13 @@ std::vector<std::string> g_filenames = {
 };
 
 file g_file;
+static std::map<void *, std::shared_ptr<char>> g_memory;
 
 void *
 platform_alloc_rwe(uint64_t len)
 {
     auto addr = aligned_alloc(0x1000, len);
+    g_memory[addr] = std::shared_ptr<char>(static_cast<char *>(addr), free);
 
 #ifdef WIN32
     DWORD oldProtect;
@@ -60,7 +66,7 @@ void
 platform_free_rwe(void *addr, uint64_t len)
 {
     bfignored(len);
-    free(addr);
+    g_memory.erase(addr);
 }
 
 void *

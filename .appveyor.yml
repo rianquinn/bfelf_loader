@@ -19,35 +19,6 @@ test: off
 install:
   - ps: 'Start-FileDownload "https://cygwin.com/setup-x86_64.exe" -FileName "setup-x86_64.exe"'
   - 'setup-x86_64.exe --quiet-mode --no-shortcuts --only-site --root "%CYG_ROOT%" --site "%CYG_MIRROR%" --local-package-dir "%CYG_ROOT%\var\cache\setup" --packages "%CYG_PACKAGES%"'
-  - 'copy setup-x86_64.exe %CYG_ROOT%\bin\'
-
-  #
-  # bfsdk (Cygwin)
-  #
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://github.com/Bareflank/bfsdk.git"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir bfsdk/build"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; cmake .."'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; make install"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build; ../scripts/export_path.sh"'
-
-  #
-  # bfsdk (MSBuild)
-  #
-  - git clone https://github.com/Bareflank/bfsdk.git"
-  - mkdir bfsdk\build_msbuild
-  - cd bfsdk\build_msbuild
-  - cmake -G "Visual Studio 15 2017 Win64" ..
-  - msbuild bfsdk.sln
-  - cmake --build . --target install
-  - cd ..
-
-  #
-  # bfsysroot
-  #
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://github.com/Bareflank/bfsysroot.git"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir bfsysroot/build"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build; cmake -DCMAKE_TOOLCHAIN_FILE=~/bfprefix/cmake/CMakeToolchain_VMM.txt -DDISABLE_WARNINGS=on .."'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build; make"'
 
 #
 # Build
@@ -55,13 +26,43 @@ install:
 build_script:
 
   #
+  # Download Repos
+  #
+  - git clone https://github.com/Bareflank/bfsdk.git bfsdk
+  - git clone https://github.com/Bareflank/bfsysroot.git bfsysroot
+
+  #
+  # bfsdk (Cygwin)
+  #
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir bfsdk/build_cygwin"'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build_cygwin; cmake .."'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build_cygwin; make install"'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsdk/build_cygwin; ../scripts/export_path.sh"'
+
+  #
+  # bfsysroot
+  #
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir bfsysroot/build_cygwin"'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build_cygwin; cmake -DCMAKE_TOOLCHAIN_FILE=~/bfprefix/cmake/CMakeToolchain_VMM.txt -DDISABLE_WARNINGS=on .."'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/bfsysroot/build_cygwin; make"'
+
+  #
   # Cygwin
   #
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir build"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; cmake .."'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; make"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; make test"'
-  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build; make install"'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; mkdir build_cygwin"'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build_cygwin; cmake .."'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build_cygwin; make"'
+  - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER/build_cygwin; make test"'
+
+  #
+  # bfsdk (MSBuild)
+  #
+  - mkdir bfsdk\build_msbuild
+  - cd bfsdk\build_msbuild
+  - cmake -G "Visual Studio 15 2017 Win64" ..
+  - msbuild bfsdk.sln
+  - cmake --build . --target install
+  - cd ../..
 
   #
   # Visual Studio (MSBuild)
@@ -69,6 +70,6 @@ build_script:
   - mkdir build_msbuild
   - cd build_msbuild
   - cmake -G "Visual Studio 15 2017 Win64" ..
-  - msbuild bfsdk.sln
-  - cmake --build . --target install
+  - msbuild bfelf_loader.sln
+  # - ctest
   - cd ..

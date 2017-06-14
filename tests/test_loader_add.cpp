@@ -31,7 +31,7 @@ TEST_CASE("bfelf_loader_add: invalid loader")
 {
     bfelf_file_t dummy_misc_ef = {};
 
-    auto ret = bfelf_loader_add(nullptr, &dummy_misc_ef, dummy, dummy);
+    auto ret = bfelf_loader_add(nullptr, &dummy_misc_ef, static_cast<char *>(dummy), static_cast<char *>(dummy));
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
@@ -39,7 +39,7 @@ TEST_CASE("bfelf_loader_add: invalid elf file")
 {
     bfelf_loader_t loader = {};
 
-    auto ret = bfelf_loader_add(&loader, nullptr, dummy, dummy);
+    auto ret = bfelf_loader_add(&loader, nullptr, static_cast<char *>(dummy), static_cast<char *>(dummy));
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
@@ -48,7 +48,7 @@ TEST_CASE("bfelf_loader_add: invalid addr")
     bfelf_loader_t loader = {};
     bfelf_file_t dummy_misc_ef = {};
 
-    auto ret = bfelf_loader_add(&loader, &dummy_misc_ef, nullptr, dummy);
+    auto ret = bfelf_loader_add(&loader, &dummy_misc_ef, nullptr, static_cast<char *>(dummy));
     CHECK(ret == BFELF_ERROR_INVALID_ARG);
 }
 
@@ -93,6 +93,6 @@ TEST_CASE("bfelf_loader_add: add fake")
     ret = bfelf_file_init(buf.get(), size, &ef);
     CHECK(ret == BFELF_SUCCESS);
 
-    ret = bfelf_loader_add(&loader, &ef, dummy, dummy);
+    ret = bfelf_loader_add(&loader, &ef, static_cast<char *>(dummy), static_cast<char *>(dummy));
     CHECK(ret == BFELF_SUCCESS);
 }
