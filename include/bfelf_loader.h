@@ -1925,8 +1925,7 @@ bfelf_loader_resolve_symbol(const struct bfelf_loader_t *loader, const char *nam
 
 /* @cond */
 
-struct bfelf_binary_t
-{
+struct bfelf_binary_t {
     char *exec;
     const char *file;
     uint64_t exec_size;
@@ -2343,7 +2342,7 @@ public:
         this->init_binaries(f, filenames);
         this->push_binary(std::move(data), std::move(binary));
 
-        auto ___ = gsl::on_failure([&]{
+        auto ___ = gsl::on_failure([&] {
             this->unload_binaries();
         });
 
@@ -2368,7 +2367,7 @@ public:
     {
         this->init_binaries(f, filenames);
 
-        auto ___ = gsl::on_failure([&]{
+        auto ___ = gsl::on_failure([&] {
             this->unload_binaries();
         });
 
